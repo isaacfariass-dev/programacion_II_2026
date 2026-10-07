@@ -1,0 +1,3 @@
+public enum Cuatrimestre {
+ANUAL, PRIMER_CUATRIMESTRE, SEGUNDO_CUATRIMESTRE
+}

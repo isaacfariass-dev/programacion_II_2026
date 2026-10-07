@@ -1,0 +1,3 @@
+public enum EstadoMateria {
+CURSANDO, REGULAR, APROBADA, DESAPROBADA
+}

@@ -1,26 +1,50 @@
 package com.zebop.sistemasCorrelativas.entity;
 
+import com.zebop.sistemasCorrelativas.entity.enums.Rol;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Entidad que gestiona las credenciales y roles de acceso.
+ * Mapea la tabla 'usuario' de la base de datos.
+ * Posee una relación 1:1 opcional con Alumno (NULL para administradores).
+ */
+@Entity
+@Table(name = "usuario")
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Long idUsuario;
-    private Long idAlumno;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_alumno", unique = true, nullable = true)
+    private Alumno alumno;
+
+    @Column(name = "nombre_usuario", nullable = false, unique = true, length = 50)
     private String nombreUsuario;
+
+    @Column(name = "clave", nullable = false, length = 255)
     private String clave;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rol", nullable = false)
     private Rol rol;
+
+    @Column(name = "fecha_creacion", insertable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 
     public Usuario() {
     }
 
-    public Usuario(Long idUsuario, Long idAlumno, String nombreUsuario, String clave, Rol rol, LocalDateTime fechaCreacion) {
+    public Usuario(Long idUsuario, Alumno alumno, String nombreUsuario, String clave, Rol rol, LocalDateTime fechaCreacion) {
         this.idUsuario = idUsuario;
-        this.idAlumno = idAlumno;
+        this.alumno = alumno;
         this.nombreUsuario = nombreUsuario;
         this.clave = clave;
         this.rol = rol;
@@ -35,12 +59,12 @@ public class Usuario implements Serializable {
         this.idUsuario = idUsuario;
     }
 
-    public Long getIdAlumno() {
-        return idAlumno;
+    public Alumno getAlumno() {
+        return alumno;
     }
 
-    public void setIdAlumno(Long idAlumno) {
-        this.idAlumno = idAlumno;
+    public void setAlumno(Alumno alumno) {
+        this.alumno = alumno;
     }
 
     public String getNombreUsuario() {
@@ -92,9 +116,7 @@ public class Usuario implements Serializable {
     public String toString() {
         return "Usuario{" +
                 "idUsuario=" + idUsuario +
-                ", idAlumno=" + idAlumno +
                 ", nombreUsuario='" + nombreUsuario + '\'' +
-                ", clave='" + clave + '\'' +
                 ", rol=" + rol +
                 ", fechaCreacion=" + fechaCreacion +
                 '}';

@@ -1,26 +1,51 @@
 package com.zebop.sistemasCorrelativas.entity;
 
+import com.zebop.sistemasCorrelativas.entity.enums.Cuatrimestre;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Entidad que representa una Asignatura/Materia perteneciente a un plan de carrera.
+ * Mapea la tabla 'materia' de la base de datos.
+ */
+@Entity
+@Table(name = "materia")
 public class Materia implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_materia")
     private Long idMateria;
-    private Long idCarrera;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_carrera", nullable = false)
+    private Carrera carrera;
+
+    @Column(name = "codigo", nullable = false, unique = true, length = 20)
     private String codigo;
+
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
+
+    @Column(name = "anio_plan", nullable = false)
     private Integer anioPlan;
-    private Integer cuatrimestre;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cuatrimestre", nullable = false)
+    private Cuatrimestre cuatrimestre;
+
+    @Column(name = "carga_horaria", nullable = false)
     private Integer cargaHoraria;
 
     public Materia() {
     }
 
-    public Materia(Long idMateria, Long idCarrera, String codigo, String nombre, Integer anioPlan, Integer cuatrimestre, Integer cargaHoraria) {
+    public Materia(Long idMateria, Carrera carrera, String codigo, String nombre, Integer anioPlan, Cuatrimestre cuatrimestre, Integer cargaHoraria) {
         this.idMateria = idMateria;
-        this.idCarrera = idCarrera;
+        this.carrera = carrera;
         this.codigo = codigo;
         this.nombre = nombre;
         this.anioPlan = anioPlan;
@@ -36,12 +61,12 @@ public class Materia implements Serializable {
         this.idMateria = idMateria;
     }
 
-    public Long getIdCarrera() {
-        return idCarrera;
+    public Carrera getCarrera() {
+        return carrera;
     }
 
-    public void setIdCarrera(Long idCarrera) {
-        this.idCarrera = idCarrera;
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
     }
 
     public String getCodigo() {
@@ -68,11 +93,11 @@ public class Materia implements Serializable {
         this.anioPlan = anioPlan;
     }
 
-    public Integer getCuatrimestre() {
+    public Cuatrimestre getCuatrimestre() {
         return cuatrimestre;
     }
 
-    public void setCuatrimestre(Integer cuatrimestre) {
+    public void setCuatrimestre(Cuatrimestre cuatrimestre) {
         this.cuatrimestre = cuatrimestre;
     }
 
@@ -101,7 +126,6 @@ public class Materia implements Serializable {
     public String toString() {
         return "Materia{" +
                 "idMateria=" + idMateria +
-                ", idCarrera=" + idCarrera +
                 ", codigo='" + codigo + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", anioPlan=" + anioPlan +

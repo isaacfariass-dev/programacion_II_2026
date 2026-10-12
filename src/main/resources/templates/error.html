@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${tituloError ?: 'Error'}">Error - SICRA</title>
+    <title data-th-text="${tituloError ?: 'Error'}">Error - SICRA</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -63,10 +63,15 @@
     </style>
 </head>
 <body>
+    <!--/* Declaración de variables del Model para compatibilidad con validadores de IDE */-->
+    <!--/*@thymesVar id="tituloError" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="mensajeError" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="codigoEstado" type="java.lang.Integer"*/-->
+
     <div class="error-card">
-        <span class="error-badge" th:text="${codigoEstado != null ? ('Código ' + codigoEstado) : 'Aviso'}">Aviso</span>
-        <h1 th:text="${tituloError ?: 'Ha ocurrido un inconveniente'}">Error</h1>
-        <p th:text="${mensajeError ?: 'No se pudo procesar la solicitud.'}">Detalle del error.</p>
+        <span class="error-badge" data-th-text="${codigoEstado != null ? ('Código ' + codigoEstado) : 'Aviso'}">Aviso</span>
+        <h1 data-th-text="${tituloError ?: 'Ha ocurrido un inconveniente'}">Error</h1>
+        <p data-th-text="${mensajeError ?: 'No se pudo procesar la solicitud.'}">Detalle del error.</p>
         <a href="javascript:history.back()" class="btn-volver">Volver a la página anterior</a>
     </div>
 </body>

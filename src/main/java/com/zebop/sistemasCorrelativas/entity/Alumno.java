@@ -1,25 +1,46 @@
 package com.zebop.sistemasCorrelativas.entity;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Entidad que representa a un Alumno o Estudiante.
+ * Mapea la tabla 'alumno' de la base de datos.
+ */
+@Entity
+@Table(name = "alumno")
 public class Alumno implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_alumno")
     private Long idAlumno;
-    private Long idCarrera;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_carrera", nullable = false)
+    private Carrera carrera;
+
+    @Column(name = "legajo", nullable = false, unique = true, length = 20)
     private String legajo;
+
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
+
+    @Column(name = "apellido", nullable = false, length = 50)
     private String apellido;
+
+    @Column(name = "anio_ingreso", nullable = false)
     private Integer anioIngreso;
 
     public Alumno() {
     }
 
-    public Alumno(Long idAlumno, Long idCarrera, String legajo, String nombre, String apellido, Integer anioIngreso) {
+    public Alumno(Long idAlumno, Carrera carrera, String legajo, String nombre, String apellido, Integer anioIngreso) {
         this.idAlumno = idAlumno;
-        this.idCarrera = idCarrera;
+        this.carrera = carrera;
         this.legajo = legajo;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -34,12 +55,12 @@ public class Alumno implements Serializable {
         this.idAlumno = idAlumno;
     }
 
-    public Long getIdCarrera() {
-        return idCarrera;
+    public Carrera getCarrera() {
+        return carrera;
     }
 
-    public void setIdCarrera(Long idCarrera) {
-        this.idCarrera = idCarrera;
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
     }
 
     public String getLegajo() {
@@ -91,7 +112,6 @@ public class Alumno implements Serializable {
     public String toString() {
         return "Alumno{" +
                 "idAlumno=" + idAlumno +
-                ", idCarrera=" + idCarrera +
                 ", legajo='" + legajo + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +

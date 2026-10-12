@@ -1,28 +1,53 @@
 package com.zebop.sistemasCorrelativas.entity;
 
+import com.zebop.sistemasCorrelativas.entity.enums.EstadoMateria;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-//implementar la interfaz serializable es un Estándar de los Java Beans 
-// de no ponerlo te larga un NotSerializableExeption 
+
+/**
+ * Entidad que registra el estado académico y calificaciones de un alumno en una materia.
+ * Mapea la tabla 'historial_academico' de la base de datos.
+ */
+@Entity
+@Table(name = "historial_academico", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_alumno_materia", columnNames = {"id_alumno", "id_materia"})
+})
 public class HistorialAcademico implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_historial")
     private Long idHistorial;
-    private Long idAlumno;
-    private Long idMateria;
-    private String estado;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_alumno", nullable = false)
+    private Alumno alumno;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_materia", nullable = false)
+    private Materia materia;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado", nullable = false)
+    private EstadoMateria estado;
+
+    @Column(name = "nota_final")
     private Double notaFinal;
+
+    @Column(name = "ultima_modificacion", insertable = false, updatable = false)
     private LocalDateTime ultimaModificacion;
 
     public HistorialAcademico() {
     }
 
-    public HistorialAcademico(Long idHistorial, Long idAlumno, Long idMateria, String estado, Double notaFinal, LocalDateTime ultimaModificacion) {
+    public HistorialAcademico(Long idHistorial, Alumno alumno, Materia materia, EstadoMateria estado, Double notaFinal, LocalDateTime ultimaModificacion) {
         this.idHistorial = idHistorial;
-        this.idAlumno = idAlumno;
-        this.idMateria = idMateria;
+        this.alumno = alumno;
+        this.materia = materia;
         this.estado = estado;
         this.notaFinal = notaFinal;
         this.ultimaModificacion = ultimaModificacion;
@@ -36,27 +61,27 @@ public class HistorialAcademico implements Serializable {
         this.idHistorial = idHistorial;
     }
 
-    public Long getIdAlumno() {
-        return idAlumno;
+    public Alumno getAlumno() {
+        return alumno;
     }
 
-    public void setIdAlumno(Long idAlumno) {
-        this.idAlumno = idAlumno;
+    public void setAlumno(Alumno alumno) {
+        this.alumno = alumno;
     }
 
-    public Long getIdMateria() {
-        return idMateria;
+    public Materia getMateria() {
+        return materia;
     }
 
-    public void setIdMateria(Long idMateria) {
-        this.idMateria = idMateria;
+    public void setMateria(Materia materia) {
+        this.materia = materia;
     }
 
-    public String getEstado() {
+    public EstadoMateria getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(EstadoMateria estado) {
         this.estado = estado;
     }
 
@@ -93,9 +118,7 @@ public class HistorialAcademico implements Serializable {
     public String toString() {
         return "HistorialAcademico{" +
                 "idHistorial=" + idHistorial +
-                ", idAlumno=" + idAlumno +
-                ", idMateria=" + idMateria +
-                ", estado='" + estado + '\'' +
+                ", estado=" + estado +
                 ", notaFinal=" + notaFinal +
                 ", ultimaModificacion=" + ultimaModificacion +
                 '}';

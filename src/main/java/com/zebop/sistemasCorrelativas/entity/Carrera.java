@@ -1,23 +1,39 @@
 package com.zebop.sistemasCorrelativas.entity;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Entidad que representa una Carrera o Plan de Estudios.
+ * Mapea la tabla 'carrera' de la base de datos.
+ */
+@Entity
+@Table(name = "carrera")
 public class Carrera implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_carrera")
     private Long idCarrera;
+
+    @Column(name = "codigo", nullable = false, unique = true, length = 20)
     private String codigo;
+
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
+
+    @Column(name = "institucion", nullable = false, length = 100)
     private String institucion;
+
+    @Column(name = "duracion_anios", nullable = false)
     private Integer duracionAnios;
 
-    // Constructor sin argumentos
     public Carrera() {
     }
 
-    // Constructor con argumentos
     public Carrera(Long idCarrera, String codigo, String nombre, String institucion, Integer duracionAnios) {
         this.idCarrera = idCarrera;
         this.codigo = codigo;
@@ -26,7 +42,6 @@ public class Carrera implements Serializable {
         this.duracionAnios = duracionAnios;
     }
 
-    // Getters y Setters
     public Long getIdCarrera() {
         return idCarrera;
     }
@@ -67,7 +82,6 @@ public class Carrera implements Serializable {
         this.duracionAnios = duracionAnios;
     }
 
-    // equals, hashCode y toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

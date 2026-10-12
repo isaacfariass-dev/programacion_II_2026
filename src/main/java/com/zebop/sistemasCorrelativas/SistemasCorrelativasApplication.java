@@ -9,5 +9,4 @@ public class SistemasCorrelativasApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SistemasCorrelativasApplication.class, args);
 	}
-
 }

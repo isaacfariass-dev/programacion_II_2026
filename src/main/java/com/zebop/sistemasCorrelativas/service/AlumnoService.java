@@ -1,6 +1,6 @@
-package java.com.zebop.sistemasCorrelativas.service;
-import java.com.zebop.sistemasCorrelativas.entity.Alumno;
-import java.com.zebop.sistemasCorrelativas.repository.AlumnoRepository;
+package com.zebop.sistemasCorrelativas.service;
+import com.zebop.sistemasCorrelativas.entity.Alumno;
+import com.zebop.sistemasCorrelativas.repository.AlumnoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

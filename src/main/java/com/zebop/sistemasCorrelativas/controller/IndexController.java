@@ -1,4 +1,4 @@
-package java.com.zebop.sistemasCorrelativas.Controller;
+package com.zebop.sistemasCorrelativas.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 @Controller

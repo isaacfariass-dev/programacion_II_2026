@@ -2,11 +2,14 @@ package com.zebop.sistemasCorrelativas.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
-
+import lombok.*;
 /**
  * Clave primaria compuesta para la entidad Correlatividad.
  * Mapea las columnas (id_materia_destino, id_materia_requisito).
  */
+@Getter
+@NoArgsConstructor 
+@AllArgsConstructor
 public class CorrelatividadId implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -14,24 +17,8 @@ public class CorrelatividadId implements Serializable {
     private Long idMateriaDestino;
     private Long idMateriaRequisito;
 
-    public CorrelatividadId() {
-    }
-
-    public CorrelatividadId(Long idMateriaDestino, Long idMateriaRequisito) {
-        this.idMateriaDestino = idMateriaDestino;
-        this.idMateriaRequisito = idMateriaRequisito;
-    }
-
-    public Long getIdMateriaDestino() {
-        return idMateriaDestino;
-    }
-
     public void setIdMateriaDestino(Long idMateriaDestino) {
         this.idMateriaDestino = idMateriaDestino;
-    }
-
-    public Long getIdMateriaRequisito() {
-        return idMateriaRequisito;
     }
 
     public void setIdMateriaRequisito(Long idMateriaRequisito) {

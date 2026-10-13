@@ -3,12 +3,16 @@ package com.zebop.sistemasCorrelativas.entity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-
+import lombok.*;
 /**
  * Entidad que representa a un Alumno o Estudiante.
  * Mapea la tabla 'alumno' de la base de datos.
  */
 @Entity
+@Getter
+@NoArgsConstructor 
+@AllArgsConstructor
+@ToString
 @Table(name = "alumno")
 public class Alumno implements Serializable {
 
@@ -35,60 +39,29 @@ public class Alumno implements Serializable {
     @Column(name = "anio_ingreso", nullable = false)
     private Integer anioIngreso;
 
-    public Alumno() {
-    }
-
-    public Alumno(Long idAlumno, Carrera carrera, String legajo, String nombre, String apellido, Integer anioIngreso) {
-        this.idAlumno = idAlumno;
-        this.carrera = carrera;
-        this.legajo = legajo;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.anioIngreso = anioIngreso;
-    }
-
-    public Long getIdAlumno() {
-        return idAlumno;
-    }
+ 
 
     public void setIdAlumno(Long idAlumno) {
         this.idAlumno = idAlumno;
-    }
-
-    public Carrera getCarrera() {
-        return carrera;
     }
 
     public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
     }
 
-    public String getLegajo() {
-        return legajo;
-    }
 
     public void setLegajo(String legajo) {
         this.legajo = legajo;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public String getApellido() {
-        return apellido;
-    }
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
-    }
-
-    public Integer getAnioIngreso() {
-        return anioIngreso;
     }
 
     public void setAnioIngreso(Integer anioIngreso) {
@@ -108,14 +81,4 @@ public class Alumno implements Serializable {
         return Objects.hash(idAlumno);
     }
 
-    @Override
-    public String toString() {
-        return "Alumno{" +
-                "idAlumno=" + idAlumno +
-                ", legajo='" + legajo + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", anioIngreso=" + anioIngreso +
-                '}';
-    }
 }

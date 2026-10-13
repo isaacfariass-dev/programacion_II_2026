@@ -5,12 +5,16 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
+import lombok.*;
 /**
  * Entidad que registra el estado académico y calificaciones de un alumno en una materia.
  * Mapea la tabla 'historial_academico' de la base de datos.
  */
 @Entity
+@Getter
+@NoArgsConstructor 
+@AllArgsConstructor
+@ToString
 @Table(name = "historial_academico", uniqueConstraints = {
     @UniqueConstraint(name = "uk_alumno_materia", columnNames = {"id_alumno", "id_materia"})
 })
@@ -41,60 +45,25 @@ public class HistorialAcademico implements Serializable {
     @Column(name = "ultima_modificacion", insertable = false, updatable = false)
     private LocalDateTime ultimaModificacion;
 
-    public HistorialAcademico() {
-    }
-
-    public HistorialAcademico(Long idHistorial, Alumno alumno, Materia materia, EstadoMateria estado, Double notaFinal, LocalDateTime ultimaModificacion) {
-        this.idHistorial = idHistorial;
-        this.alumno = alumno;
-        this.materia = materia;
-        this.estado = estado;
-        this.notaFinal = notaFinal;
-        this.ultimaModificacion = ultimaModificacion;
-    }
-
-    public Long getIdHistorial() {
-        return idHistorial;
-    }
-
     public void setIdHistorial(Long idHistorial) {
         this.idHistorial = idHistorial;
     }
 
-    public Alumno getAlumno() {
-        return alumno;
-    }
 
     public void setAlumno(Alumno alumno) {
         this.alumno = alumno;
-    }
-
-    public Materia getMateria() {
-        return materia;
     }
 
     public void setMateria(Materia materia) {
         this.materia = materia;
     }
 
-    public EstadoMateria getEstado() {
-        return estado;
-    }
-
     public void setEstado(EstadoMateria estado) {
         this.estado = estado;
     }
 
-    public Double getNotaFinal() {
-        return notaFinal;
-    }
-
     public void setNotaFinal(Double notaFinal) {
         this.notaFinal = notaFinal;
-    }
-
-    public LocalDateTime getUltimaModificacion() {
-        return ultimaModificacion;
     }
 
     public void setUltimaModificacion(LocalDateTime ultimaModificacion) {
@@ -114,13 +83,4 @@ public class HistorialAcademico implements Serializable {
         return Objects.hash(idHistorial);
     }
 
-    @Override
-    public String toString() {
-        return "HistorialAcademico{" +
-                "idHistorial=" + idHistorial +
-                ", estado=" + estado +
-                ", notaFinal=" + notaFinal +
-                ", ultimaModificacion=" + ultimaModificacion +
-                '}';
-    }
 }

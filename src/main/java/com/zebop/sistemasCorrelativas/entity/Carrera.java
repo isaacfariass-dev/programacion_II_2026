@@ -3,12 +3,16 @@ package com.zebop.sistemasCorrelativas.entity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-
+import lombok.*;
 /**
  * Entidad que representa una Carrera o Plan de Estudios.
  * Mapea la tabla 'carrera' de la base de datos.
  */
 @Entity
+@Getter
+@NoArgsConstructor 
+@AllArgsConstructor
+@ToString
 @Table(name = "carrera")
 public class Carrera implements Serializable {
 
@@ -31,51 +35,21 @@ public class Carrera implements Serializable {
     @Column(name = "duracion_anios", nullable = false)
     private Integer duracionAnios;
 
-    public Carrera() {
-    }
-
-    public Carrera(Long idCarrera, String codigo, String nombre, String institucion, Integer duracionAnios) {
-        this.idCarrera = idCarrera;
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.institucion = institucion;
-        this.duracionAnios = duracionAnios;
-    }
-
-    public Long getIdCarrera() {
-        return idCarrera;
-    }
 
     public void setIdCarrera(Long idCarrera) {
         this.idCarrera = idCarrera;
-    }
-
-    public String getCodigo() {
-        return codigo;
     }
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public String getInstitucion() {
-        return institucion;
-    }
-
     public void setInstitucion(String institucion) {
         this.institucion = institucion;
-    }
-
-    public Integer getDuracionAnios() {
-        return duracionAnios;
     }
 
     public void setDuracionAnios(Integer duracionAnios) {
@@ -95,14 +69,4 @@ public class Carrera implements Serializable {
         return Objects.hash(idCarrera);
     }
 
-    @Override
-    public String toString() {
-        return "Carrera{" +
-                "idCarrera=" + idCarrera +
-                ", codigo='" + codigo + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", institucion='" + institucion + '\'' +
-                ", duracionAnios=" + duracionAnios +
-                '}';
-    }
 }

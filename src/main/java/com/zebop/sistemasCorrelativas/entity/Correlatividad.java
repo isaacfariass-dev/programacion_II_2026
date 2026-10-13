@@ -4,12 +4,16 @@ import com.zebop.sistemasCorrelativas.entity.enums.TipoRequisito;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-
+import lombok.*;
 /**
  * Entidad que modela la relación N:M recursiva de correlatividad entre materias.
  * Mapea la tabla 'correlatividad' con clave compuesta.
  */
 @Entity
+@Getter
+@NoArgsConstructor 
+@AllArgsConstructor
+@ToString
 @Table(name = "correlatividad")
 @IdClass(CorrelatividadId.class)
 public class Correlatividad implements Serializable {
@@ -36,14 +40,6 @@ public class Correlatividad implements Serializable {
     @Column(name = "tipo_requisito", nullable = false)
     private TipoRequisito tipoRequisito;
 
-    public Correlatividad() {
-    }
-
-    public Correlatividad(Long idMateriaDestino, Long idMateriaRequisito, TipoRequisito tipoRequisito) {
-        this.idMateriaDestino = idMateriaDestino;
-        this.idMateriaRequisito = idMateriaRequisito;
-        this.tipoRequisito = tipoRequisito;
-    }
 
     public Correlatividad(Materia materiaDestino, Materia materiaRequisito, TipoRequisito tipoRequisito) {
         this.materiaDestino = materiaDestino;
@@ -54,27 +50,14 @@ public class Correlatividad implements Serializable {
         if (materiaRequisito != null) {
             this.idMateriaRequisito = materiaRequisito.getIdMateria();
         }
-        this.tipoRequisito = tipoRequisito;
-    }
-
-    public Long getIdMateriaDestino() {
-        return idMateriaDestino;
+        his.tipoRequisito = tipoRequisito;
     }
 
     public void setIdMateriaDestino(Long idMateriaDestino) {
         this.idMateriaDestino = idMateriaDestino;
     }
-
-    public Long getIdMateriaRequisito() {
-        return idMateriaRequisito;
-    }
-
     public void setIdMateriaRequisito(Long idMateriaRequisito) {
         this.idMateriaRequisito = idMateriaRequisito;
-    }
-
-    public Materia getMateriaDestino() {
-        return materiaDestino;
     }
 
     public void setMateriaDestino(Materia materiaDestino) {
@@ -84,10 +67,6 @@ public class Correlatividad implements Serializable {
         }
     }
 
-    public Materia getMateriaRequisito() {
-        return materiaRequisito;
-    }
-
     public void setMateriaRequisito(Materia materiaRequisito) {
         this.materiaRequisito = materiaRequisito;
         if (materiaRequisito != null) {
@@ -95,9 +74,6 @@ public class Correlatividad implements Serializable {
         }
     }
 
-    public TipoRequisito getTipoRequisito() {
-        return tipoRequisito;
-    }
 
     public void setTipoRequisito(TipoRequisito tipoRequisito) {
         this.tipoRequisito = tipoRequisito;
@@ -117,12 +93,4 @@ public class Correlatividad implements Serializable {
         return Objects.hash(idMateriaDestino, idMateriaRequisito);
     }
 
-    @Override
-    public String toString() {
-        return "Correlatividad{" +
-                "idMateriaDestino=" + idMateriaDestino +
-                ", idMateriaRequisito=" + idMateriaRequisito +
-                ", tipoRequisito=" + tipoRequisito +
-                '}';
-    }
 }

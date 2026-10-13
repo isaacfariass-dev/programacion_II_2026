@@ -4,12 +4,18 @@ import com.zebop.sistemasCorrelativas.entity.enums.Cuatrimestre;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.*;
+
 
 /**
  * Entidad que representa una Asignatura/Materia perteneciente a un plan de carrera.
  * Mapea la tabla 'materia' de la base de datos.
  */
 @Entity
+@Getter
+@NoArgsConstructor 
+@AllArgsConstructor
+@ToString
 @Table(name = "materia")
 public class Materia implements Serializable {
 
@@ -40,69 +46,30 @@ public class Materia implements Serializable {
     @Column(name = "carga_horaria", nullable = false)
     private Integer cargaHoraria;
 
-    public Materia() {
-    }
 
-    public Materia(Long idMateria, Carrera carrera, String codigo, String nombre, Integer anioPlan, Cuatrimestre cuatrimestre, Integer cargaHoraria) {
-        this.idMateria = idMateria;
-        this.carrera = carrera;
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.anioPlan = anioPlan;
-        this.cuatrimestre = cuatrimestre;
-        this.cargaHoraria = cargaHoraria;
-    }
-
-    public Long getIdMateria() {
-        return idMateria;
-    }
 
     public void setIdMateria(Long idMateria) {
         this.idMateria = idMateria;
     }
-
-    public Carrera getCarrera() {
-        return carrera;
-    }
-
     public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
-    }
-
-    public String getCodigo() {
-        return codigo;
     }
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public Integer getAnioPlan() {
-        return anioPlan;
     }
 
     public void setAnioPlan(Integer anioPlan) {
         this.anioPlan = anioPlan;
     }
 
-    public Cuatrimestre getCuatrimestre() {
-        return cuatrimestre;
-    }
 
     public void setCuatrimestre(Cuatrimestre cuatrimestre) {
         this.cuatrimestre = cuatrimestre;
-    }
-
-    public Integer getCargaHoraria() {
-        return cargaHoraria;
     }
 
     public void setCargaHoraria(Integer cargaHoraria) {
@@ -122,15 +89,4 @@ public class Materia implements Serializable {
         return Objects.hash(idMateria);
     }
 
-    @Override
-    public String toString() {
-        return "Materia{" +
-                "idMateria=" + idMateria +
-                ", codigo='" + codigo + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", anioPlan=" + anioPlan +
-                ", cuatrimestre=" + cuatrimestre +
-                ", cargaHoraria=" + cargaHoraria +
-                '}';
-    }
 }

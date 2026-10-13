@@ -5,13 +5,17 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
+import lombok.*;
 /**
  * Entidad que gestiona las credenciales y roles de acceso.
  * Mapea la tabla 'usuario' de la base de datos.
  * Posee una relación 1:1 opcional con Alumno (NULL para administradores).
  */
 @Entity
+@Getter
+@NoArgsConstructor 
+@AllArgsConstructor
+@ToString
 @Table(name = "usuario")
 public class Usuario implements Serializable {
 
@@ -39,60 +43,25 @@ public class Usuario implements Serializable {
     @Column(name = "fecha_creacion", insertable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 
-    public Usuario() {
-    }
-
-    public Usuario(Long idUsuario, Alumno alumno, String nombreUsuario, String clave, Rol rol, LocalDateTime fechaCreacion) {
-        this.idUsuario = idUsuario;
-        this.alumno = alumno;
-        this.nombreUsuario = nombreUsuario;
-        this.clave = clave;
-        this.rol = rol;
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public Long getIdUsuario() {
-        return idUsuario;
-    }
 
     public void setIdUsuario(Long idUsuario) {
         this.idUsuario = idUsuario;
-    }
-
-    public Alumno getAlumno() {
-        return alumno;
     }
 
     public void setAlumno(Alumno alumno) {
         this.alumno = alumno;
     }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
-    }
-
-    public String getClave() {
-        return clave;
     }
 
     public void setClave(String clave) {
         this.clave = clave;
     }
 
-    public Rol getRol() {
-        return rol;
-    }
-
     public void setRol(Rol rol) {
         this.rol = rol;
-    }
-
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
     }
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
@@ -110,15 +79,5 @@ public class Usuario implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(idUsuario);
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "idUsuario=" + idUsuario +
-                ", nombreUsuario='" + nombreUsuario + '\'' +
-                ", rol=" + rol +
-                ", fechaCreacion=" + fechaCreacion +
-                '}';
     }
 }

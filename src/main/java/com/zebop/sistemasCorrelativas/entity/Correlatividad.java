@@ -50,7 +50,7 @@ public class Correlatividad implements Serializable {
         if (materiaRequisito != null) {
             this.idMateriaRequisito = materiaRequisito.getIdMateria();
         }
-        his.tipoRequisito = tipoRequisito;
+        this.tipoRequisito = tipoRequisito;
     }
 
     public void setIdMateriaDestino(Long idMateriaDestino) {

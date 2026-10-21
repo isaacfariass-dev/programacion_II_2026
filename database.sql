@@ -1,4 +1,3 @@
--- Creación del esquema
 CREATE SCHEMA IF NOT EXISTS sistemasCorrelativas DEFAULT CHARACTER SET utf8mb4;
 USE sistemasCorrelativas;
 

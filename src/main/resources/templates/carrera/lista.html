@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Carreras — SICRA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/mensajes :: mensajes}"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-1">
+                <i class="bi bi-journal-bookmark-fill text-primary me-2"></i>Carreras y Planes de Estudio
+            </h1>
+            <p class="text-muted mb-0 small">Administración de programas académicos registrados en el sistema.</p>
+        </div>
+        <a th:href="@{/carreras/nueva}" class="btn btn-primary fw-semibold">
+            <i class="bi bi-plus-circle me-1"></i> Nueva Carrera
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="ps-4">Código</th>
+                            <th scope="col">Nombre de la Carrera</th>
+                            <th scope="col">Institución</th>
+                            <th scope="col">Duración (Años)</th>
+                            <th scope="col" class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(carreras)}">
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                No hay carreras registradas en el sistema.
+                            </td>
+                        </tr>
+                        <tr th:each="c : ${carreras}">
+                            <td class="ps-4">
+                                <span class="badge bg-secondary font-monospace" th:text="${c.codigo}"></span>
+                            </td>
+                            <td class="fw-semibold text-dark" th:text="${c.nombre}"></td>
+                            <td class="text-muted" th:text="${c.institucion}"></td>
+                            <td>
+                                <span class="badge bg-info text-dark" th:text="${c.duracionAnios + ' años'}"></span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <a th:href="@{/materias(carreraId=${c.idCarrera})}" class="btn btn-outline-info btn-sm me-1" title="Ver Materias">
+                                    <i class="bi bi-book"></i> Materias
+                                </a>
+                                <a th:href="@{/carreras/editar/{id}(id=${c.idCarrera})}" class="btn btn-outline-primary btn-sm me-1" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form method="post" th:action="@{/carreras/eliminar/{id}(id=${c.idCarrera})}" class="d-inline"
+                                      onsubmit="return confirm('¿Seguro que deseas eliminar esta carrera? Esta acción fallará si tiene materias asociadas.');">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-white border-top py-3 text-center text-muted small mt-auto">
+    <div class="container">
+        <strong>SICRA</strong> — UTN INSPT 2026
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

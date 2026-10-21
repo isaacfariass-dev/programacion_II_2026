@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Impacto — SICRA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/mensajes :: mensajes}"></div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Título y Descripción -->
+            <div class="text-center mb-4">
+                <h1 class="h3 fw-bold text-dark">
+                    <i class="bi bi-lightning-charge-fill text-warning me-2"></i>Simulador de Impacto ("Efecto Dominó")
+                </h1>
+                <p class="text-muted">
+                    Proyectá qué asignaturas pasarían a estar <strong>habilitadas para cursar o rendir</strong> si aprobaras una materia específica hoy.
+                </p>
+            </div>
+
+            <!-- Formulario de Selección -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <form method="get" th:action="@{/plan/simulador}" class="row g-3 align-items-end">
+                        <div class="col-md-5">
+                            <label for="alumnoId" class="form-label fw-semibold">Estudiante:</label>
+                            <select id="alumnoId" name="alumnoId" class="form-select" onchange="this.form.submit()">
+                                <option th:each="a : ${alumnos}"
+                                        th:value="${a.idAlumno}"
+                                        th:text="${a.apellido + ', ' + a.nombre + ' (' + a.legajo + ')'}"
+                                        th:selected="${a.idAlumno == alumnoActualId}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-5">
+                            <label for="idMateria" class="form-label fw-semibold">Materia a Simular Aprobada:</label>
+                            <select id="idMateria" name="idMateria" class="form-select" required>
+                                <option value="" disabled th:selected="${materiaSeleccionadaId == null}">-- Seleccioná una materia --</option>
+                                <option th:each="m : ${materias}"
+                                        th:value="${m.idMateria}"
+                                        th:text="${m.codigo + ' — ' + m.nombre + ' (Año ' + m.anioPlan + ')'}"
+                                        th:selected="${m.idMateria == materiaSeleccionadaId}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-warning w-100 fw-semibold">
+                                <i class="bi bi-play-fill me-1"></i> Simular
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Resultado de la Simulación -->
+            <div th:if="${simulacion != null}" class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-warning text-dark me-2">Simulación Activa</span>
+                            Materia evaluada: <strong th:text="${simulacion.materiaSimulada.codigo + ' - ' + simulacion.materiaSimulada.nombre}"></strong>
+                        </div>
+                        <span class="badge bg-success fs-6" th:text="${simulacion.cantidadNuevasHabilitadas + ' nuevas habilitadas'}"></span>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <!-- Materias recién desbloqueadas -->
+                        <div class="col-md-6 border-end">
+                            <h5 class="h6 fw-bold text-success mb-3">
+                                <i class="bi bi-unlock-fill me-2"></i>Materias que se Desbloquean Inmediatamente
+                            </h5>
+
+                            <div th:if="${#lists.isEmpty(simulacion.materiasDesbloqueadas)}" class="alert alert-secondary mb-0">
+                                <i class="bi bi-info-circle me-1"></i> Aprobar esta materia por sí sola no desbloquea nuevas asignaturas de inmediato (faltan otras correlativas conjuntas).
+                            </div>
+
+                            <ul th:unless="${#lists.isEmpty(simulacion.materiasDesbloqueadas)}" class="list-group list-group-flush">
+                                <li th:each="desb : ${simulacion.materiasDesbloqueadas}" class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <div>
+                                        <span class="badge bg-success text-white me-2" th:text="${desb.codigo}"></span>
+                                        <strong th:text="${desb.nombre}"></strong>
+                                    </div>
+                                    <span class="badge bg-light text-dark border" th:text="'Año ' + ${desb.anioPlan}"></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Todas las materias que dependen directamente -->
+                        <div class="col-md-6">
+                            <h5 class="h6 fw-bold text-primary mb-3">
+                                <i class="bi bi-diagram-2 me-2"></i>Todas las Materias que la Exigen como Requisito
+                            </h5>
+
+                            <div th:if="${#lists.isEmpty(simulacion.materiasQueDependenDirectamente)}" class="text-muted small fst-italic">
+                                Ninguna materia posterior requiere esta asignatura como correlativa (materia final del plan).
+                            </div>
+
+                            <ul th:unless="${#lists.isEmpty(simulacion.materiasQueDependenDirectamente)}" class="list-group list-group-flush">
+                                <li th:each="dep : ${simulacion.materiasQueDependenDirectamente}" class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <div>
+                                        <span class="badge bg-secondary text-white me-2" th:text="${dep.codigo}"></span>
+                                        <span th:text="${dep.nombre}"></span>
+                                    </div>
+                                    <span class="badge bg-light text-dark border" th:text="'Año ' + ${dep.anioPlan}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light text-end py-3">
+                    <a th:href="@{/plan(alumnoId=${alumnoActualId})}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i> Volver al Plan de Estudio
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<footer class="bg-white border-top py-3 text-center text-muted small mt-auto">
+    <div class="container">
+        <strong>SICRA</strong> — Sistema Inteligente de Correlatividades y Rutas Académicas &bull; UTN INSPT 2026
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

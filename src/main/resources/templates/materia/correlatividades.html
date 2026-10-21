@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Correlatividades de ' + ${materia.nombre} + ' — SICRA'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="container py-4">
+    <div th:replace="~{fragments/mensajes :: mensajes}"></div>
+
+    <!-- Encabezado de la Materia -->
+    <div class="card shadow-sm border-0 mb-4 bg-light">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <span class="badge bg-secondary font-monospace fs-6 me-2" th:text="${materia.codigo}"></span>
+                    <span class="badge bg-primary me-2" th:text="'Año ' + ${materia.anioPlan}"></span>
+                    <span class="badge bg-dark" th:text="${materia.carrera.nombre}"></span>
+                    <h1 class="h3 fw-bold text-dark mt-2 mb-0" th:text="${materia.nombre}"></h1>
+                </div>
+                <a th:href="@{/materias(carreraId=${materia.carrera.idCarrera})}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Volver a Materias
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Columna Izquierda: Agregar Requisito Previsto -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="h6 mb-0 fw-bold">
+                        <i class="bi bi-plus-circle me-2"></i>Asignar Correlativa Previa
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" th:action="@{/materias/{id}/correlatividades/agregar(id=${materia.idMateria})}">
+                        <div class="mb-3">
+                            <label for="idMateriaRequisito" class="form-label fw-semibold">Materia Requisito:</label>
+                            <select id="idMateriaRequisito" name="idMateriaRequisito" class="form-select" required>
+                                <option value="" disabled selected>-- Seleccione una materia previa --</option>
+                                <option th:each="cand : ${candidatas}"
+                                        th:value="${cand.idMateria}"
+                                        th:text="${cand.codigo + ' — ' + cand.nombre + ' (Año ' + cand.anioPlan + ')'}">
+                                </option>
+                            </select>
+                            <div class="form-text">Materia que el estudiante debe haber cursado o aprobado previamente.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="tipoRequisito" class="form-label fw-semibold">Condición Exigida:</label>
+                            <select id="tipoRequisito" name="tipoRequisito" class="form-select" required>
+                                <option th:each="tipo : ${tiposRequisito}"
+                                        th:value="${tipo}"
+                                        th:text="${tipo}">
+                                </option>
+                            </select>
+                            <div class="form-text">
+                                <strong>REGULAR:</strong> Requiere cursada aprobada. <br>
+                                <strong>APROBADA:</strong> Requiere final aprobado.
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-warning w-100 fw-semibold text-dark">
+                            <i class="bi bi-link-45deg me-1"></i> Vincular Correlatividad
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Tablas de Dependencias -->
+        <div class="col-lg-7">
+            <!-- Requisitos Previos -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="h6 mb-0 fw-bold text-dark">
+                        <i class="bi bi-arrow-left-circle-fill text-warning me-2"></i>Correlativas que Necesita Esta Materia
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-3">Código</th>
+                                    <th>Materia Requisito</th>
+                                    <th>Condición</th>
+                                    <th class="text-end pe-3">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:if="${#lists.isEmpty(requisitos)}">
+                                    <td colspan="4" class="text-center py-3 text-muted small fst-italic">
+                                        Esta asignatura no tiene requisitos previos cargados.
+                                    </td>
+                                </tr>
+                                <tr th:each="r : ${requisitos}">
+                                    <td class="ps-3">
+                                        <span class="badge bg-secondary font-monospace" th:text="${r.materiaRequisito.codigo}"></span>
+                                    </td>
+                                    <td class="fw-semibold text-dark" th:text="${r.materiaRequisito.nombre}"></td>
+                                    <td>
+                                        <span class="badge" th:classappend="${r.tipoRequisito.name() == 'APROBADA'} ? 'bg-success' : 'bg-info text-dark'"
+                                              th:text="${r.tipoRequisito}">
+                                        </span>
+                                    </td>
+                                    <td class="text-end pe-3">
+                                        <form method="post" th:action="@{/materias/{id}/correlatividades/eliminar(id=${materia.idMateria})}" class="d-inline"
+                                              onsubmit="return confirm('¿Eliminar esta dependencia de correlatividad?');">
+                                            <input type="hidden" name="idMateriaRequisito" th:value="${r.idMateriaRequisito}">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Quitar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materias que Habilita -->
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 border-bottom">
+                    <h5 class="h6 mb-0 fw-bold text-dark">
+                        <i class="bi bi-arrow-right-circle-fill text-primary me-2"></i>Materias a las que Habilita
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-3">Código</th>
+                                    <th>Materia Destino</th>
+                                    <th>Condición Exigida</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:if="${#lists.isEmpty(materiasQueHabilita)}">
+                                    <td colspan="3" class="text-center py-3 text-muted small fst-italic">
+                                        No hay materias que dependan de esta asignatura.
+                                    </td>
+                                </tr>
+                                <tr th:each="h : ${materiasQueHabilita}">
+                                    <td class="ps-3">
+                                        <span class="badge bg-secondary font-monospace" th:text="${h.materiaDestino.codigo}"></span>
+                                    </td>
+                                    <td class="fw-semibold text-dark" th:text="${h.materiaDestino.nombre}"></td>
+                                    <td>
+                                        <span class="badge" th:classappend="${h.tipoRequisito.name() == 'APROBADA'} ? 'bg-success' : 'bg-info text-dark'"
+                                              th:text="${h.tipoRequisito}">
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-white border-top py-3 text-center text-muted small mt-auto">
+    <div class="container">
+        <strong>SICRA</strong> — UTN INSPT 2026
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

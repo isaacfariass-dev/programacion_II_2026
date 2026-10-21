@@ -12,4 +12,5 @@ public interface MateriaRepository extends JpaRepository<Materia, Long> {
     Optional<Materia> findByCodigo(String codigo);
     boolean existsByCodigo(String codigo);
     List<Materia> findByCarrera_IdCarrera(Long idCarrera);
+    List<Materia> findByCarrera_IdCarreraOrderByAnioPlanAscCodigoAsc(Long idCarrera);
 }

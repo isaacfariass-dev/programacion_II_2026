@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" th:href="@{/plan}">
+            <i class="bi bi-diagram-3-fill text-warning me-2"></i>SICRA
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plan}">
+                        <i class="bi bi-mortarboard-fill me-1"></i> Plan de Estudio
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/plan/simulador}">
+                        <i class="bi bi-lightning-charge-fill me-1"></i> Simulador
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/carreras}">
+                        <i class="bi bi-journal-bookmark-fill me-1"></i> Carreras
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/materias}">
+                        <i class="bi bi-book-fill me-1"></i> Materias
+                    </a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-center text-light small">
+                <span class="badge bg-secondary me-2">Modo Parcial / Desarrollo</span>
+                <span class="text-white-50">UTN - INSPT</span>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

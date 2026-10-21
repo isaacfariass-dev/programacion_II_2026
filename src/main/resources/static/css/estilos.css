@@ -1,0 +1,103 @@
+:root {
+    --color-aprobada-bg: #d1e7dd;
+    --color-aprobada-border: #198754;
+    --color-aprobada-text: #0f5132;
+
+    --color-habilitada-bg: #fff3cd;
+    --color-habilitada-border: #ffc107;
+    --color-habilitada-text: #664d03;
+
+    --color-regular-bg: #cff4fc;
+    --color-regular-border: #0dcaf0;
+    --color-regular-text: #055160;
+
+    --color-desaprobada-bg: #f8d7da;
+    --color-desaprobada-border: #dc3545;
+    --color-desaprobada-text: #842029;
+
+    --color-bloqueada-bg: #f3f4f6;
+    --color-bloqueada-border: #adb5bd;
+    --color-bloqueada-text: #6c757d;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Tarjetas de Materia */
+.tarjeta-materia {
+    border-radius: 8px;
+    border-left-width: 6px !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    background-color: #ffffff;
+}
+
+.tarjeta-materia:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.tarjeta-materia.estado-aprobada {
+    border-color: var(--color-aprobada-border);
+    background-color: var(--color-aprobada-bg);
+}
+
+.tarjeta-materia.estado-habilitada {
+    border-color: var(--color-habilitada-border);
+    background-color: var(--color-habilitada-bg);
+}
+
+.tarjeta-materia.estado-regular {
+    border-color: var(--color-regular-border);
+    background-color: var(--color-regular-bg);
+}
+
+.tarjeta-materia.estado-desaprobada {
+    border-color: var(--color-desaprobada-border);
+    background-color: var(--color-desaprobada-bg);
+}
+
+.tarjeta-materia.estado-bloqueada {
+    border-color: var(--color-bloqueada-border);
+    background-color: var(--color-bloqueada-bg);
+    opacity: 0.85;
+}
+
+/* Indicadores de Requisito */
+.badge-requisito-cumplido {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+    font-size: 0.75rem;
+}
+
+.badge-requisito-pendiente {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+    font-size: 0.75rem;
+}
+
+/* Leyenda de Colores */
+.indicador-color {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.indicador-aprobada { background-color: var(--color-aprobada-border); }
+.indicador-habilitada { background-color: var(--color-habilitada-border); }
+.indicador-regular { background-color: var(--color-regular-border); }
+.indicador-desaprobada { background-color: var(--color-desaprobada-border); }
+.indicador-bloqueada { background-color: var(--color-bloqueada-border); }

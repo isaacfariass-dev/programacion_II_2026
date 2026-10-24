@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plan de Estudios y Correlatividades — SICRA</title>
+    <title>Malla Curricular Interactiva — SICRA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/estilos.css}">
@@ -12,250 +12,271 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<main class="container-fluid px-4 py-4">
+<main class="container-fluid px-4 py-3">
     <div th:replace="~{fragments/mensajes :: mensajes}"></div>
 
-    <!-- Barra de Selección de Alumno y Cabecera -->
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body">
-            <div class="row align-items-center g-3">
-                <div class="col-md-5">
-                    <h2 class="h4 mb-1 fw-bold text-dark">
-                        <i class="bi bi-mortarboard text-primary me-2"></i>Árbol de Correlatividades
-                    </h2>
-                    <p class="text-muted mb-0 small" th:if="${plan != null}">
-                        <strong th:text="${plan.carrera.nombre}"></strong> — <span th:text="${plan.carrera.institucion}"></span>
-                    </p>
-                </div>
-
-                <div class="col-md-4">
-                    <form method="get" th:action="@{/plan}" class="d-flex align-items-center">
-                        <label for="selectAlumno" class="form-label me-2 mb-0 small fw-bold text-nowrap">Alumno Activo:</label>
-                        <select id="selectAlumno" name="alumnoId" class="form-select form-select-sm" onchange="this.form.submit()">
-                            <option th:each="a : ${alumnos}"
-                                    th:value="${a.idAlumno}"
-                                    th:text="${a.apellido + ', ' + a.nombre + ' (' + a.legajo + ')'}"
-                                    th:selected="${a.idAlumno == alumnoActualId}">
-                            </option>
-                        </select>
-                    </form>
-                </div>
-
-                <div class="col-md-3 text-md-end">
-                    <a th:href="@{/plan/simulador(alumnoId=${alumnoActualId})}" class="btn btn-outline-warning text-dark btn-sm fw-semibold">
-                        <i class="bi bi-lightning-charge-fill me-1"></i> Probar Simulador
-                    </a>
+    <!-- Header y Métricas Estilo UniMalla -->
+    <div class="header-malla p-3 mb-4">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-5 col-md-6">
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 text-primary p-2 rounded-3 me-3 fs-3">
+                        <i class="bi bi-grid-3x3-gap-fill"></i>
+                    </div>
+                    <div>
+                        <h1 class="h5 mb-0 fw-bold text-dark">Malla Curricular Interactiva</h1>
+                        <p class="text-muted mb-0 small" th:if="${plan != null}">
+                            <strong th:text="${plan.carrera.nombre}"></strong> — <span th:text="${plan.carrera.institucion}"></span>
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Panel de Estadísticas y Avance -->
-            <div th:if="${plan != null}" class="mt-4 pt-3 border-top">
-                <div class="row align-items-center g-3">
-                    <div class="col-lg-3 col-md-6">
-                        <div class="small text-muted mb-1">Progreso en la Carrera</div>
-                        <div class="d-flex align-items-center">
-                            <div class="progress flex-grow-1 me-2" style="height: 10px;">
-                                <div class="progress-bar bg-success" role="progressbar"
-                                     th:style="'width: ' + ${plan.porcentajeAvance} + '%;'"
-                                     th:aria-valuenow="${plan.porcentajeAvance}" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            </div>
-                            <span class="fw-bold small" th:text="${plan.porcentajeAvance + '%'}"></span>
-                        </div>
-                    </div>
+            <div class="col-lg-4 col-md-6">
+                <form method="get" th:action="@{/plan}" class="d-flex align-items-center bg-light p-1 rounded-3 border">
+                    <label for="selectAlumno" class="form-label ms-2 me-2 mb-0 small fw-bold text-muted text-nowrap">
+                        <i class="bi bi-person-circle me-1"></i> Estudiante:
+                    </label>
+                    <select id="selectAlumno" name="alumnoId" class="form-select form-select-sm border-0 bg-transparent fw-semibold" onchange="this.form.submit()">
+                        <option th:each="a : ${alumnos}"
+                                th:value="${a.idAlumno}"
+                                th:text="${a.apellido + ', ' + a.nombre + ' (' + a.legajo + ')'}"
+                                th:selected="${a.idAlumno == alumnoActualId}">
+                        </option>
+                    </select>
+                </form>
+            </div>
 
-                    <div class="col-lg-2 col-md-3 col-6">
-                        <div class="small text-muted">Aprobadas</div>
-                        <div class="fs-5 fw-bold text-success" th:text="${plan.materiasAprobadas + ' / ' + plan.totalMaterias}"></div>
-                    </div>
+            <div class="col-lg-3 text-lg-end text-md-start">
+                <a th:href="@{/plan/simulador(alumnoId=${alumnoActualId})}" class="btn btn-warning text-dark btn-sm fw-bold px-3 shadow-sm">
+                    <i class="bi bi-lightning-charge-fill me-1"></i> Simulador de Impacto
+                </a>
+            </div>
+        </div>
 
-                    <div class="col-lg-2 col-md-3 col-6">
-                        <div class="small text-muted">Habilitadas</div>
-                        <div class="fs-5 fw-bold text-warning text-dark" th:text="${plan.materiasHabilitadas}"></div>
+        <!-- Panel de Métricas Rápidas -->
+        <div th:if="${plan != null}" class="row g-2 mt-3 pt-3 border-top" id="panelMetricas">
+            <div class="col-lg-3 col-md-6">
+                <div class="metrica-card">
+                    <div class="d-flex justify-content-between align-items-center mb-1 small text-muted">
+                        <span>Progreso de Carrera</span>
+                        <strong class="text-success fw-bold" id="metricaPorcentajeTexto" th:text="${plan.porcentajeAvance + '%'}"></strong>
                     </div>
-
-                    <div class="col-lg-2 col-md-3 col-6">
-                        <div class="small text-muted">Bloqueadas</div>
-                        <div class="fs-5 fw-bold text-secondary" th:text="${plan.materiasBloqueadas}"></div>
+                    <div class="progress-unimalla">
+                        <div id="metricaPorcentajeBarra" class="progress-bar bg-success" role="progressbar"
+                             th:style="'width: ' + ${plan.porcentajeAvance} + '%;'"
+                             th:aria-valuenow="${plan.porcentajeAvance}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="col-lg-3 col-md-3 col-6">
-                        <div class="small text-muted">Promedio Académico</div>
-                        <div class="fs-5 fw-bold text-primary">
-                            <span th:text="${plan.promedioNotas}"></span>
-                            <span class="fs-6 text-muted fw-normal" th:if="${plan.promedioNotas > 0}"> / 10</span>
-                        </div>
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="metrica-card text-center">
+                    <div class="small text-muted mb-0">Aprobadas</div>
+                    <div class="fs-5 fw-bold text-success" id="metricaAprobadas" th:text="${plan.materiasAprobadas + ' / ' + plan.totalMaterias}"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="metrica-card text-center">
+                    <div class="small text-muted mb-0">Habilitadas</div>
+                    <div class="fs-5 fw-bold text-warning text-dark" id="metricaHabilitadas" th:text="${plan.materiasHabilitadas}"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="metrica-card text-center">
+                    <div class="small text-muted mb-0">Bloqueadas</div>
+                    <div class="fs-5 fw-bold text-secondary" id="metricaBloqueadas" th:text="${plan.materiasBloqueadas}"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-6">
+                <div class="metrica-card text-center">
+                    <div class="small text-muted mb-0">Promedio General</div>
+                    <div class="fs-5 fw-bold text-primary">
+                        <span id="metricaPromedio" th:text="${plan.promedioNotas}"></span>
+                        <span class="fs-6 text-muted fw-normal" th:if="${plan.promedioNotas > 0}"> / 10</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Leyenda de Colores de Requisitos -->
-    <div class="card border-0 shadow-sm mb-4 bg-white">
-        <div class="card-body py-2">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 small">
-                <span class="fw-bold text-muted text-uppercase" style="font-size: 0.75rem;">Estados del Plan:</span>
-                <div><span class="indicador-color indicador-aprobada"></span><strong class="text-success">Aprobada</strong> (Final rendido)</div>
-                <div><span class="indicador-color indicador-regular"></span><strong class="text-info">Regular</strong> (Cursada aprobada)</div>
-                <div><span class="indicador-color indicador-habilitada"></span><strong class="text-warning text-dark">Habilitada</strong> (Correlativas cumplidas)</div>
-                <div><span class="indicador-color indicador-bloqueada"></span><strong class="text-secondary">Bloqueada</strong> (Faltan requisitos)</div>
-                <div><span class="indicador-color indicador-desaprobada"></span><strong class="text-danger">Desaprobada</strong></div>
-            </div>
+    <!-- Leyenda de Estados y Ayuda Interactiva -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 px-1 small">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <span class="fw-bold text-muted text-uppercase" style="font-size: 0.75rem;">Estados:</span>
+            <span><span class="indicador-color indicador-aprobada"></span><strong class="text-success">Aprobada</strong></span>
+            <span><span class="indicador-color indicador-regular"></span><strong class="text-info">Regular</strong></span>
+            <span><span class="indicador-color indicador-habilitada"></span><strong class="text-warning text-dark">Habilitada</strong></span>
+            <span><span class="indicador-color indicador-bloqueada"></span><strong class="text-secondary">Bloqueada</strong></span>
+            <span><span class="indicador-color indicador-desaprobada"></span><strong class="text-danger">Desaprobada</strong></span>
+        </div>
+        <div class="d-flex align-items-center gap-2 text-muted">
+            <span class="badge bg-white text-dark border shadow-sm">
+                <i class="bi bi-cursor-fill text-primary me-1"></i> Posá el mouse para ver correlatividades
+            </span>
+            <span class="badge bg-white text-dark border shadow-sm">
+                <i class="bi bi-check2-circle text-success me-1"></i> Tildá con 1 clic para aprobar
+            </span>
         </div>
     </div>
 
-    <!-- Vista por Años Académicos -->
-    <div th:if="${plan != null}">
-        <div th:each="entry : ${plan.materiasPorAnio}" class="mb-5">
-            <div class="d-flex align-items-center mb-3">
-                <span class="badge bg-primary px-3 py-2 fs-6 rounded-pill me-2">
-                    <i class="bi bi-calendar3 me-1"></i> Año <span th:text="${entry.key}"></span>
-                </span>
-                <span class="text-muted small" th:text="${entry.value.size() + ' asignaturas'}"></span>
-                <div class="flex-grow-1 border-bottom ms-3"></div>
-            </div>
+    <!-- Tablero Horizontal de la Malla (Estilo UniMalla) -->
+    <div class="malla-tablero-wrapper" th:if="${plan != null}">
+        <div class="malla-tablero" id="tableroMalla">
+            <div th:each="entry : ${plan.materiasPorAnio}" class="malla-columna">
+                <div class="malla-columna-header">
+                    <div>
+                        <h2 class="malla-columna-titulo">
+                            Año <span th:text="${entry.key}"></span>
+                        </h2>
+                        <span class="text-muted" style="font-size: 0.72rem;">
+                            <span th:text="${entry.value.size()}"></span> materias en este año
+                        </span>
+                    </div>
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-2 py-1 small">
+                        Plan Oficial
+                    </span>
+                </div>
 
-            <!-- Grilla de Materias del Año -->
-            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
-                <div class="col" th:each="dto : ${entry.value}">
-                    <div class="card h-100 shadow-sm tarjeta-materia" th:classappend="${dto.estadoVisual.claseCss}">
-                        <div class="card-header bg-transparent border-0 pb-0 d-flex justify-content-between align-items-start">
-                            <div>
-                                <span class="badge bg-dark bg-opacity-75 small font-monospace" th:text="${dto.materia.codigo}"></span>
-                                <span class="badge bg-light text-dark border small ms-1" th:text="${dto.materia.cuatrimestre}"></span>
+                <div class="malla-columna-body">
+                    <div th:each="dto : ${entry.value}"
+                         class="malla-card"
+                         th:classappend="${dto.estadoVisual.claseCss}"
+                         th:data-materia-id="${dto.materia.idMateria}"
+                         th:data-requisitos="${dto.requisitosIds}"
+                         th:data-habilita="${dto.habilitaIds}"
+                         th:data-estado="${dto.estadoVisual.name()}"
+                         th:data-codigo="${dto.materia.codigo}"
+                         th:data-nombre="${dto.materia.nombre}"
+                         th:data-nota="${dto.notaFinal != null ? dto.notaFinal : ''}">
+
+                        <!-- Fila Superior: Código, Cuatrimestre y Badge de Estado -->
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="malla-card-codigo" th:text="${dto.materia.codigo}"></span>
+                            <div class="d-flex align-items-center gap-1">
+                                <span class="badge bg-light text-secondary border" style="font-size: 0.65rem;" th:text="${dto.materia.cuatrimestre}"></span>
+                                <span class="badge badge-estado" th:classappend="${dto.estadoVisual.badgeBootstrap}" style="font-size: 0.65rem;" th:text="${dto.estadoVisual.etiqueta}"></span>
                             </div>
-                            <span class="badge" th:classappend="${dto.estadoVisual.badgeBootstrap}" th:text="${dto.estadoVisual.etiqueta}"></span>
                         </div>
 
-                        <div class="card-body">
-                            <h5 class="card-title h6 fw-bold mb-2 text-dark" th:text="${dto.materia.nombre}"></h5>
-                            <p class="card-text text-muted small mb-2">
-                                <i class="bi bi-clock me-1"></i> <span th:text="${dto.materia.cargaHoraria + ' horas totales'}"></span>
-                                <span th:if="${dto.notaFinal != null}" class="badge bg-success ms-2">
-                                    Nota: <strong th:text="${dto.notaFinal}"></strong>
+                        <!-- Nombre de la Materia -->
+                        <div class="malla-card-nombre" th:text="${dto.materia.nombre}"></div>
+
+                        <!-- Fila Inferior: Carga Horaria, Nota y Acciones Rápidas -->
+                        <div class="malla-card-meta pt-1 mt-1 border-top">
+                            <div class="d-flex align-items-center gap-1">
+                                <span><i class="bi bi-clock me-1"></i><span th:text="${dto.materia.cargaHoraria + 'h'}"></span></span>
+                                <span class="badge bg-success badge-nota"
+                                      th:style="${dto.notaFinal != null} ? '' : 'display:none;'">
+                                    Nota: <strong class="valor-nota" th:text="${dto.notaFinal}"></strong>
                                 </span>
-                            </p>
-
-                            <!-- Correlativas Previas (Requisitos) -->
-                            <div class="mt-3 pt-2 border-top">
-                                <div class="fw-semibold text-muted mb-1" style="font-size: 0.75rem;">
-                                    <i class="bi bi-arrow-left-circle me-1"></i> Requiere para cursar/rendir:
-                                </div>
-                                <div th:if="${#lists.isEmpty(dto.requisitosPrevios)}" class="text-muted small fst-italic">
-                                    Sin requisitos previos (Materia inicial)
-                                </div>
-                                <div th:unless="${#lists.isEmpty(dto.requisitosPrevios)}" class="d-flex flex-wrap gap-1">
-                                    <span th:each="req : ${dto.requisitosPrevios}"
-                                          class="badge"
-                                          th:classappend="${req.cumplido} ? 'badge-requisito-cumplido' : 'badge-requisito-pendiente'"
-                                          th:title="${req.nombreMateria + ' (' + req.tipoRequisito + ') - Estado: ' + req.estadoActualTexto}">
-                                        <i class="bi" th:classappend="${req.cumplido} ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
-                                        <span th:text="${req.codigoMateria}"></span>
-                                        <small class="opacity-75" th:text="'(' + ${req.tipoRequisito} + ')'"></small>
-                                    </span>
-                                </div>
                             </div>
 
-                            <!-- Materias que Habilita -->
-                            <div th:unless="${#lists.isEmpty(dto.materiasQueHabilita)}" class="mt-2">
-                                <div class="fw-semibold text-muted mb-1" style="font-size: 0.75rem;">
-                                    <i class="bi bi-arrow-right-circle me-1"></i> Habilita a futuro:
-                                </div>
-                                <div class="d-flex flex-wrap gap-1">
-                                    <span th:each="hab : ${dto.materiasQueHabilita}"
-                                          class="badge bg-white text-dark border small"
-                                          th:title="${hab.nombre}">
-                                        <span th:text="${hab.codigo}"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Footer con Botones de Cambio de Estado -->
-                        <div class="card-footer bg-transparent border-0 pt-0 pb-3">
-                            <div class="btn-group w-100" role="group">
-                                <button type="button" class="btn btn-sm btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-pencil-square me-1"></i> Modificar Estado
+                            <div class="d-flex align-items-center gap-1">
+                                <!-- Botón de Tildado Rápido (1 clic) -->
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-success p-1 py-0 btn-toggle-rapido"
+                                        th:title="${dto.aprobada} ? 'Restablecer materia a no cursada' : 'Aprobar materia rápidamente (nota 8)'"
+                                        th:data-materia-id="${dto.materia.idMateria}"
+                                        th:data-estado="${dto.estadoVisual.name()}">
+                                    <i class="bi" th:classappend="${dto.aprobada} ? 'bi-check-circle-fill' : 'bi-check2'"></i>
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><h6 class="dropdown-header">Cambiar estado del alumno</h6></li>
-                                    <li>
-                                        <button class="dropdown-item text-success" type="button"
-                                                data-bs-toggle="modal"
-                                                th:data-bs-target="'#modalAprobar' + ${dto.materia.idMateria}">
-                                            <i class="bi bi-check-circle-fill me-2"></i> Marcar como Aprobada...
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <form method="post" th:action="@{/plan/actualizar-estado}">
-                                            <input type="hidden" name="alumnoId" th:value="${alumnoActualId}">
-                                            <input type="hidden" name="idMateria" th:value="${dto.materia.idMateria}">
-                                            <input type="hidden" name="estado" value="REGULAR">
-                                            <button type="submit" class="dropdown-item text-info">
-                                                <i class="bi bi-hourglass-split me-2"></i> Marcar como Regular
+
+                                <!-- Menú de Opciones para Calificación Precisa -->
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light border p-1 py-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm small">
+                                        <li><h6 class="dropdown-header">Opciones de Materia</h6></li>
+                                        <li>
+                                            <button class="dropdown-item text-success" type="button"
+                                                    data-bs-toggle="modal"
+                                                    th:data-bs-target="'#modalAprobar' + ${dto.materia.idMateria}">
+                                                <i class="bi bi-pencil-square me-2"></i> Asignar Nota Específica...
                                             </button>
-                                        </form>
-                                    </li>
-                                    <li>
-                                        <form method="post" th:action="@{/plan/actualizar-estado}">
-                                            <input type="hidden" name="alumnoId" th:value="${alumnoActualId}">
-                                            <input type="hidden" name="idMateria" th:value="${dto.materia.idMateria}">
-                                            <input type="hidden" name="estado" value="DESAPROBADA">
-                                            <button type="submit" class="dropdown-item text-danger">
-                                                <i class="bi bi-x-circle-fill me-2"></i> Marcar como Desaprobada
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item text-info btn-accion-ajax" type="button"
+                                                    th:data-materia-id="${dto.materia.idMateria}"
+                                                    data-estado="REGULAR">
+                                                <i class="bi bi-hourglass-split me-2"></i> Marcar Regular
                                             </button>
-                                        </form>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form method="post" th:action="@{/plan/resetear-materia}">
-                                            <input type="hidden" name="alumnoId" th:value="${alumnoActualId}">
-                                            <input type="hidden" name="idMateria" th:value="${dto.materia.idMateria}">
-                                            <button type="submit" class="dropdown-item text-secondary">
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item text-danger btn-accion-ajax" type="button"
+                                                    th:data-materia-id="${dto.materia.idMateria}"
+                                                    data-estado="DESAPROBADA">
+                                                <i class="bi bi-x-circle-fill me-2"></i> Marcar Desaprobada
+                                            </button>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <button class="dropdown-item text-secondary btn-reset-ajax" type="button"
+                                                    th:data-materia-id="${dto.materia.idMateria}">
                                                 <i class="bi bi-arrow-counterclockwise me-2"></i> Restablecer (No cursada)
                                             </button>
-                                        </form>
-                                    </li>
-                                </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Modal para Cargar Nota al Aprobar -->
-                    <div class="modal fade" th:id="'modalAprobar' + ${dto.materia.idMateria}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-sm">
-                            <div class="modal-content">
-                                <form method="post" th:action="@{/plan/actualizar-estado}">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title h6 fw-bold">Aprobar Materia</h5>
+                        <!-- Modal para Asignar Nota Numérica -->
+                        <div class="modal fade" th:id="'modalAprobar' + ${dto.materia.idMateria}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-sm">
+                                <div class="modal-content shadow">
+                                    <div class="modal-header py-2">
+                                        <h5 class="modal-title h6 fw-bold">Calificar Materia</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p class="small text-muted mb-3" th:text="${dto.materia.nombre}"></p>
-                                        <input type="hidden" name="alumnoId" th:value="${alumnoActualId}">
-                                        <input type="hidden" name="idMateria" th:value="${dto.materia.idMateria}">
-                                        <input type="hidden" name="estado" value="APROBADA">
+                                        <p class="small text-muted mb-2 fw-semibold" th:text="${dto.materia.nombre}"></p>
                                         <div class="mb-3">
                                             <label class="form-label small fw-semibold">Nota Final (1.00 a 10.00):</label>
-                                            <input type="number" step="0.5" min="1" max="10" name="notaFinal"
-                                                   class="form-control" placeholder="Ej: 8" th:value="${dto.notaFinal}">
+                                            <input type="number" step="0.5" min="1" max="10"
+                                                   th:id="'inputNota' + ${dto.materia.idMateria}"
+                                                   class="form-control form-control-sm"
+                                                   placeholder="Ej: 8.5"
+                                                   th:value="${dto.notaFinal != null ? dto.notaFinal : 8.0}">
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
+                                    <div class="modal-footer py-2">
                                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-success btn-sm">Guardar Aprobada</button>
+                                        <button type="button" class="btn btn-success btn-sm btn-guardar-nota-modal"
+                                                th:data-materia-id="${dto.materia.idMateria}"
+                                                th:data-modal-id="'modalAprobar' + ${dto.materia.idMateria}">
+                                            Guardar Aprobada
+                                        </button>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+<!-- Barra Inferior Flotante de Correlatividad (Efecto Hover Estilo UniMalla) -->
+<div id="barraHoverCorrelatividad" class="barra-info-correlatividad shadow-lg">
+    <span id="textoHoverCorrelatividad"></span>
+</div>
+
+<!-- Toast Flotante de Notificaciones Rápidas -->
+<div id="toastRapido" class="toast toast-guardado-rapido align-items-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body" id="toastRapidoMensaje">
+            <i class="bi bi-check-circle-fill text-success me-2"></i> Estado actualizado
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
 
 <footer class="bg-white border-top py-3 text-center text-muted small mt-auto">
     <div class="container">
@@ -264,5 +285,263 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- =====================================================================
+     JavaScript Interactivo: Hover de Correlatividades y Guardado AJAX
+     ===================================================================== -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const ALUMNO_ACTUAL_ID = /*[[${alumnoActualId}]]*/ 1;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const tarjetas = document.querySelectorAll('.malla-card');
+        const barraHover = document.getElementById('barraHoverCorrelatividad');
+        const textoHover = document.getElementById('textoHoverCorrelatividad');
+        const toastElement = document.getElementById('toastRapido');
+        const toastBs = new bootstrap.Toast(toastElement, { delay: 2500 });
+        const toastMensaje = document.getElementById('toastRapidoMensaje');
+
+        // Mapa rápido en memoria de tarjetas por ID
+        const mapaTarjetas = {};
+        tarjetas.forEach(t => {
+            mapaTarjetas[t.dataset.materiaId] = t;
+        });
+
+        // -------------------------------------------------------------
+        // 1. Efecto Hover de Correlatividades (UniMalla Style)
+        // -------------------------------------------------------------
+        tarjetas.forEach(tarjeta => {
+            tarjeta.addEventListener('mouseenter', () => {
+                const materiaId = tarjeta.dataset.materiaId;
+                const reqString = tarjeta.dataset.requisitos || '';
+                const habString = tarjeta.dataset.habilita || '';
+                const nombre = tarjeta.dataset.nombre;
+                const codigo = tarjeta.dataset.codigo;
+
+                const reqIds = reqString ? reqString.split(',').filter(Boolean) : [];
+                const habIds = habString ? habString.split(',').filter(Boolean) : [];
+
+                tarjeta.classList.add('malla-card-activa');
+
+                // Resaltar requisitos previos en naranja
+                reqIds.forEach(id => {
+                    const reqCard = mapaTarjetas[id];
+                    if (reqCard) reqCard.classList.add('malla-card-requisito');
+                });
+
+                // Resaltar materias que habilita en azul
+                habIds.forEach(id => {
+                    const habCard = mapaTarjetas[id];
+                    if (habCard) habCard.classList.add('malla-card-habilita');
+                });
+
+                // Atenuar las materias que no tienen nada que ver
+                tarjetas.forEach(t => {
+                    const id = t.dataset.materiaId;
+                    if (id !== materiaId && !reqIds.includes(id) && !habIds.includes(id)) {
+                        t.classList.add('malla-card-dimmed');
+                    }
+                });
+
+                // Texto informativo en barra flotante
+                const nombresReq = reqIds.map(id => mapaTarjetas[id]?.dataset.codigo).filter(Boolean).join(', ') || 'Sin requisitos';
+                const nombresHab = habIds.map(id => mapaTarjetas[id]?.dataset.codigo).filter(Boolean).join(', ') || 'Ninguna (Materia final)';
+
+                textoHover.innerHTML = `<strong>[${codigo}] ${nombre}</strong> &bull; <span style="color:#f97316;">Requiere:</span> ${nombresReq} &bull; <span style="color:#60a5fa;">Habilita:</span> ${nombresHab}`;
+                barraHover.classList.add('visible');
+            });
+
+            tarjeta.addEventListener('mouseleave', () => {
+                limpiarEfectosHover();
+            });
+        });
+
+        function limpiarEfectosHover() {
+            tarjetas.forEach(t => {
+                t.classList.remove('malla-card-activa', 'malla-card-requisito', 'malla-card-habilita', 'malla-card-dimmed');
+            });
+            barraHover.classList.remove('visible');
+        }
+
+        // -------------------------------------------------------------
+        // 2. Tildado Rápido (1 Clic) y Guardado Silencioso vía AJAX
+        // -------------------------------------------------------------
+        document.querySelectorAll('.btn-toggle-rapido').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const materiaId = btn.dataset.materiaId;
+                const estadoActual = btn.dataset.estado;
+
+                if (estadoActual === 'APROBADA') {
+                    // Si ya está aprobada, un clic la restablece
+                    enviarResetAjax(materiaId);
+                } else {
+                    // Si no está aprobada, un clic la aprueba con nota 8 por defecto
+                    enviarActualizacionAjax(materiaId, 'APROBADA', 8.0);
+                }
+            });
+        });
+
+        // Opciones del dropdown: Regular / Desaprobada
+        document.querySelectorAll('.btn-accion-ajax').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const materiaId = btn.dataset.materiaId;
+                const estado = btn.dataset.estado;
+                enviarActualizacionAjax(materiaId, estado, null);
+            });
+        });
+
+        // Opciones del dropdown: Restablecer
+        document.querySelectorAll('.btn-reset-ajax').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const materiaId = btn.dataset.materiaId;
+                enviarResetAjax(materiaId);
+            });
+        });
+
+        // Guardado desde Modal (con nota numérica específica)
+        document.querySelectorAll('.btn-guardar-nota-modal').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const materiaId = btn.dataset.materiaId;
+                const modalId = btn.dataset.modalId;
+                const inputNota = document.getElementById('inputNota' + materiaId);
+                const notaVal = inputNota ? parseFloat(inputNota.value) : 8.0;
+
+                const modalElem = document.getElementById(modalId);
+                const modalInst = bootstrap.Modal.getInstance(modalElem);
+                if (modalInst) modalInst.hide();
+
+                enviarActualizacionAjax(materiaId, 'APROBADA', isNaN(notaVal) ? null : notaVal);
+            });
+        });
+
+        // Función AJAX para actualizar estado
+        function enviarActualizacionAjax(idMateria, estado, notaFinal) {
+            const formData = new URLSearchParams();
+            formData.append('alumnoId', ALUMNO_ACTUAL_ID);
+            formData.append('idMateria', idMateria);
+            formData.append('estado', estado);
+            if (notaFinal !== null && notaFinal !== undefined) {
+                formData.append('notaFinal', notaFinal);
+            }
+
+            fetch('/plan/api/actualizar-estado', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Error al actualizar');
+                return res.json();
+            })
+            .then(planActualizado => {
+                aplicarActualizacionPlan(planActualizado);
+                mostrarToast(`Materia actualizada a <strong>${estado}</strong>`);
+            })
+            .catch(err => {
+                console.error(err);
+                mostrarToast('Error al conectar con el servidor', true);
+            });
+        }
+
+        // Función AJAX para restablecer estado
+        function enviarResetAjax(idMateria) {
+            const formData = new URLSearchParams();
+            formData.append('alumnoId', ALUMNO_ACTUAL_ID);
+            formData.append('idMateria', idMateria);
+
+            fetch('/plan/api/resetear-materia', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Error al resetear');
+                return res.json();
+            })
+            .then(planActualizado => {
+                aplicarActualizacionPlan(planActualizado);
+                mostrarToast('Materia restablecida a no cursada');
+            })
+            .catch(err => {
+                console.error(err);
+                mostrarToast('Error al restablecer la materia', true);
+            });
+        }
+
+        // Actualiza el DOM con el nuevo plan devuelto por el servidor
+        function aplicarActualizacionPlan(plan) {
+            // 1. Métricas superiores
+            document.getElementById('metricaPorcentajeTexto').innerText = plan.porcentajeAvance + '%';
+            const barra = document.getElementById('metricaPorcentajeBarra');
+            barra.style.width = plan.porcentajeAvance + '%';
+            barra.setAttribute('aria-valuenow', plan.porcentajeAvance);
+
+            document.getElementById('metricaAprobadas').innerText = plan.materiasAprobadas + ' / ' + plan.totalMaterias;
+            document.getElementById('metricaHabilitadas').innerText = plan.materiasHabilitadas;
+            document.getElementById('metricaBloqueadas').innerText = plan.materiasBloqueadas;
+            document.getElementById('metricaPromedio').innerText = plan.promedioNotas;
+
+            // 2. Actualizar tarjetas individuales
+            for (const anio in plan.materiasPorAnio) {
+                const listaMaterias = plan.materiasPorAnio[anio];
+                listaMaterias.forEach(dto => {
+                    const card = mapaTarjetas[dto.materia.idMateria];
+                    if (!card) return;
+
+                    // Actualizar clases de estado
+                    card.classList.remove('estado-aprobada', 'estado-regular', 'estado-habilitada', 'estado-bloqueada', 'estado-desaprobada');
+                    card.classList.add(dto.estadoVisual.claseCss);
+                    card.dataset.estado = dto.estadoVisual.name;
+
+                    // Actualizar badge de estado
+                    const badge = card.querySelector('.badge-estado');
+                    if (badge) {
+                        badge.className = 'badge badge-estado ' + dto.estadoVisual.badgeBootstrap;
+                        badge.innerText = dto.estadoVisual.etiqueta;
+                    }
+
+                    // Actualizar nota si existe
+                    const badgeNota = card.querySelector('.badge-nota');
+                    const valorNota = card.querySelector('.valor-nota');
+                    if (badgeNota && valorNota) {
+                        if (dto.notaFinal !== null && dto.notaFinal !== undefined) {
+                            valorNota.innerText = dto.notaFinal;
+                            badgeNota.style.display = 'inline-block';
+                        } else {
+                            badgeNota.style.display = 'none';
+                        }
+                    }
+
+                    // Actualizar botón rápido
+                    const btnToggle = card.querySelector('.btn-toggle-rapido');
+                    if (btnToggle) {
+                        btnToggle.dataset.estado = dto.estadoVisual.name;
+                        const icon = btnToggle.querySelector('i');
+                        if (icon) {
+                            if (dto.estadoVisual.name === 'APROBADA') {
+                                icon.className = 'bi bi-check-circle-fill';
+                                btnToggle.title = 'Restablecer materia a no cursada';
+                            } else {
+                                icon.className = 'bi bi-check2';
+                                btnToggle.title = 'Aprobar materia rápidamente (nota 8)';
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function mostrarToast(mensaje, esError = false) {
+            toastElement.classList.toggle('bg-danger', esError);
+            toastElement.classList.toggle('bg-dark', !esError);
+            toastMensaje.innerHTML = (esError ? '<i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>' : '<i class="bi bi-check-circle-fill text-success me-2"></i>') + mensaje;
+            toastBs.show();
+        }
+    });
+    /*]]>*/
+</script>
 </body>
 </html>

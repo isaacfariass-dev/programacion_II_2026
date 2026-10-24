@@ -1,28 +1,47 @@
+/* =====================================================================
+   SICRA — Estilos Inspirados en UniMalla (Malla Curricular Interactiva)
+   UTN - INSPT — Programación II 2026
+   ===================================================================== */
+
 :root {
-    --color-aprobada-bg: #d1e7dd;
-    --color-aprobada-border: #198754;
-    --color-aprobada-text: #0f5132;
+    --bg-app: #f8fafc;
+    --text-primary: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
 
-    --color-habilitada-bg: #fff3cd;
-    --color-habilitada-border: #ffc107;
-    --color-habilitada-text: #664d03;
+    /* Paleta de Estados de Materia */
+    --aprobada-color: #10b981;
+    --aprobada-bg: #ecfdf5;
+    --aprobada-border: #6ee7b7;
 
-    --color-regular-bg: #cff4fc;
-    --color-regular-border: #0dcaf0;
-    --color-regular-text: #055160;
+    --habilitada-color: #f59e0b;
+    --habilitada-bg: #fffbeb;
+    --habilitada-border: #fcd34d;
 
-    --color-desaprobada-bg: #f8d7da;
-    --color-desaprobada-border: #dc3545;
-    --color-desaprobada-text: #842029;
+    --regular-color: #0284c7;
+    --regular-bg: #f0f9ff;
+    --regular-border: #7dd3fc;
 
-    --color-bloqueada-bg: #f3f4f6;
-    --color-bloqueada-border: #adb5bd;
-    --color-bloqueada-text: #6c757d;
+    --bloqueada-color: #94a3b8;
+    --bloqueada-bg: #f8fafc;
+    --bloqueada-border: #cbd5e1;
+
+    --desaprobada-color: #ef4444;
+    --desaprobada-bg: #fef2f2;
+    --desaprobada-border: #fca5a5;
+
+    /* Colores Interactivos de Correlatividad (Hover) */
+    --hover-requisito-border: #f97316;
+    --hover-requisito-glow: rgba(249, 115, 22, 0.35);
+
+    --hover-habilita-border: #2563eb;
+    --hover-habilita-glow: rgba(37, 99, 235, 0.35);
 }
 
 body {
-    background-color: #f8f9fa;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -32,72 +51,273 @@ main {
     flex: 1;
 }
 
-/* Tarjetas de Materia */
-.tarjeta-materia {
-    border-radius: 8px;
-    border-left-width: 6px !important;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    background-color: #ffffff;
+/* =====================================================================
+   Barra de Métricas y Cabecera Estilo UniMalla
+   ===================================================================== */
+.header-malla {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.tarjeta-materia:hover {
+.metrica-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #f1f5f9;
+}
+
+/* Barra de progreso sutil */
+.progress-unimalla {
+    height: 8px;
+    background-color: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+/* =====================================================================
+   Tablero de la Malla (Scroll Horizontal Tipo UniMalla)
+   ===================================================================== */
+.malla-tablero-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.malla-tablero {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    padding: 0.5rem 0.25rem 2rem 0.25rem;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar estilizada */
+.malla-tablero::-webkit-scrollbar {
+    height: 10px;
+}
+
+.malla-tablero::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.malla-tablero::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.malla-tablero::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* =====================================================================
+   Columnas por Año / Período
+   ===================================================================== */
+.malla-columna {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 300px;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+.malla-columna-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.malla-columna-titulo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.malla-columna-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+/* =====================================================================
+   Tarjetas de Materia (.malla-card)
+   ===================================================================== */
+.malla-card {
+    background: #ffffff;
+    border: 1.5px solid var(--border-color);
+    border-left-width: 5px !important;
+    border-radius: 12px;
+    padding: 0.85rem;
+    cursor: default;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease, border-color 0.15s ease;
+    position: relative;
+    user-select: none;
+}
+
+.malla-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
 }
 
-.tarjeta-materia.estado-aprobada {
-    border-color: var(--color-aprobada-border);
-    background-color: var(--color-aprobada-bg);
+/* Estados Visuales */
+.malla-card.estado-aprobada {
+    background-color: var(--aprobada-bg);
+    border-color: var(--aprobada-border);
+    border-left-color: var(--aprobada-color) !important;
 }
 
-.tarjeta-materia.estado-habilitada {
-    border-color: var(--color-habilitada-border);
-    background-color: var(--color-habilitada-bg);
+.malla-card.estado-habilitada {
+    background-color: var(--habilitada-bg);
+    border-color: var(--habilitada-border);
+    border-left-color: var(--habilitada-color) !important;
 }
 
-.tarjeta-materia.estado-regular {
-    border-color: var(--color-regular-border);
-    background-color: var(--color-regular-bg);
+.malla-card.estado-regular {
+    background-color: var(--regular-bg);
+    border-color: var(--regular-border);
+    border-left-color: var(--regular-color) !important;
 }
 
-.tarjeta-materia.estado-desaprobada {
-    border-color: var(--color-desaprobada-border);
-    background-color: var(--color-desaprobada-bg);
+.malla-card.estado-bloqueada {
+    background-color: var(--bloqueada-bg);
+    border-color: var(--bloqueada-border);
+    border-left-color: var(--bloqueada-color) !important;
+    opacity: 0.88;
 }
 
-.tarjeta-materia.estado-bloqueada {
-    border-color: var(--color-bloqueada-border);
-    background-color: var(--color-bloqueada-bg);
-    opacity: 0.85;
+.malla-card.estado-desaprobada {
+    background-color: var(--desaprobada-bg);
+    border-color: var(--desaprobada-border);
+    border-left-color: var(--desaprobada-color) !important;
 }
 
-/* Indicadores de Requisito */
-.badge-requisito-cumplido {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-    border: 1px solid #a5d6a7;
+/* Contenido de la tarjeta */
+.malla-card-codigo {
+    font-family: monospace;
+    font-weight: 600;
+    font-size: 0.72rem;
+    color: #475569;
+    background: rgba(0,0,0,0.04);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.malla-card-nombre {
+    font-size: 0.90rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--text-primary);
+    margin: 0.4rem 0 0.5rem 0;
+}
+
+.malla-card-meta {
     font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.badge-requisito-pendiente {
-    background-color: #ffebee;
-    color: #c62828;
-    border: 1px solid #ef9a9a;
-    font-size: 0.75rem;
+/* =====================================================================
+   Efectos Hover Interactivos (Camino de Correlatividades)
+   ===================================================================== */
+.malla-card-activa {
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+    border-color: #0f172a !important;
+    z-index: 10;
+}
+
+/* Materias que son requisitos previos (iluminadas en Naranja) */
+.malla-card-requisito {
+    border-color: var(--hover-requisito-border) !important;
+    border-width: 2px !important;
+    box-shadow: 0 0 0 3px var(--hover-requisito-glow) !important;
+    transform: translateY(-2px);
+    z-index: 5;
+    background-color: #fff7ed !important;
+}
+
+/* Materias que habilita hacia adelante (iluminadas en Azul) */
+.malla-card-habilita {
+    border-color: var(--hover-habilita-border) !important;
+    border-width: 2px !important;
+    box-shadow: 0 0 0 3px var(--hover-habilita-glow) !important;
+    transform: translateY(-2px);
+    z-index: 5;
+    background-color: #eff6ff !important;
+}
+
+/* Atenuación del resto de la malla */
+.malla-card-dimmed {
+    opacity: 0.28 !important;
+    filter: grayscale(40%);
+}
+
+/* =====================================================================
+   Barra Inferior Flotante de Correlativas (Tooltip Informativo)
+   ===================================================================== */
+.barra-info-correlatividad {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(15, 23, 42, 0.95);
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+    padding: 0.65rem 1.4rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    font-size: 0.85rem;
+    z-index: 1050;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+    max-width: 90vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.barra-info-correlatividad.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* Toast flotante para feedback de guardado rápido */
+.toast-guardado-rapido {
+    position: fixed;
+    top: 70px;
+    right: 25px;
+    z-index: 1060;
+    min-width: 260px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    border-radius: 12px;
 }
 
 /* Leyenda de Colores */
 .indicador-color {
     display: inline-block;
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     border-radius: 3px;
     margin-right: 6px;
     vertical-align: middle;
 }
 
-.indicador-aprobada { background-color: var(--color-aprobada-border); }
-.indicador-habilitada { background-color: var(--color-habilitada-border); }
-.indicador-regular { background-color: var(--color-regular-border); }
-.indicador-desaprobada { background-color: var(--color-desaprobada-border); }
-.indicador-bloqueada { background-color: var(--color-bloqueada-border); }
+.indicador-aprobada { background-color: var(--aprobada-color); }
+.indicador-habilitada { background-color: var(--habilitada-color); }
+.indicador-regular { background-color: var(--regular-color); }
+.indicador-desaprobada { background-color: var(--desaprobada-color); }
+.indicador-bloqueada { background-color: var(--bloqueada-color); }

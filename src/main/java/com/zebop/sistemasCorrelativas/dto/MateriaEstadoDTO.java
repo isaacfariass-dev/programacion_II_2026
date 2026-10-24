@@ -44,4 +44,38 @@ public class MateriaEstadoDTO {
     public boolean isRegular() {
         return estadoVisual == EstadoVisualMateria.REGULAR;
     }
+
+    public String getRequisitosIds() {
+        String resultado;
+        if (requisitosPrevios == null || requisitosPrevios.isEmpty()) {
+            resultado = "";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < requisitosPrevios.size(); i++) {
+                if (i > 0) {
+                    sb.append(",");
+                }
+                sb.append(requisitosPrevios.get(i).getIdMateria());
+            }
+            resultado = sb.toString();
+        }
+        return resultado;
+    }
+
+    public String getHabilitaIds() {
+        String resultado;
+        if (materiasQueHabilita == null || materiasQueHabilita.isEmpty()) {
+            resultado = "";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < materiasQueHabilita.size(); i++) {
+                if (i > 0) {
+                    sb.append(",");
+                }
+                sb.append(materiasQueHabilita.get(i).getIdMateria());
+            }
+            resultado = sb.toString();
+        }
+        return resultado;
+    }
 }

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Carrera — SICRA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="selector-page">
+
+<div class="selector-card">
+
+    <!-- Badge superior -->
+    <div class="selector-header">
+        <div class="selector-badge">
+            <i class="bi bi-mortarboard-fill"></i>
+            Paso 1 de 1
+        </div>
+        <h1 class="selector-title">Seleccioná tu Carrera</h1>
+        <p class="selector-subtitle">
+            Elegí la facultad y carrera para ver tu malla curricular.
+        </p>
+    </div>
+
+    <!-- Error si la carrera no fue válida -->
+    <div class="selector-error" th:if="${errorSelector != null}">
+        <i class="bi bi-exclamation-circle-fill" style="margin-right:0.4rem;"></i>
+        <span th:text="${errorSelector}">La selección no es válida.</span>
+    </div>
+
+    <form th:action="@{/selector-carrera}" method="post" id="formSelector">
+
+        <!-- Select 1: Facultad / Institución -->
+        <div style="margin-bottom: 1.25rem;">
+            <label for="selectInstitucion" class="form-label-sicra">
+                <i class="bi bi-building" style="margin-right:0.3rem;"></i>
+                Facultad / Institución
+            </label>
+            <select id="selectInstitucion"
+                    class="form-select-sicra"
+                    onchange="filtrarCarreras()">
+                <option value="">— Seleccioná una institución —</option>
+                <option th:each="inst : ${instituciones}"
+                        th:value="${inst}"
+                        th:text="${inst}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Select 2: Carrera (filtrado por institución) -->
+        <div style="margin-bottom: 1rem;">
+            <label for="carreraId" class="form-label-sicra">
+                <i class="bi bi-journal-bookmark-fill" style="margin-right:0.3rem;"></i>
+                Carrera
+            </label>
+            <select id="carreraId"
+                    name="carreraId"
+                    class="form-select-sicra"
+                    disabled
+                    onchange="mostrarInfoCarrera()">
+                <option value="">— Primero elegí una institución —</option>
+            </select>
+        </div>
+
+        <!-- Caja informativa de la carrera seleccionada -->
+        <div class="carrera-info-box" id="infoCarrera">
+            <i class="bi bi-info-circle-fill" style="margin-right:0.4rem;"></i>
+            <span id="textoInfoCarrera"></span>
+        </div>
+
+        <!-- Botón de acción -->
+        <button type="submit"
+                class="btn-primary-sicra"
+                id="btnIrAMalla"
+                disabled
+                style="margin-top: 1.5rem; opacity: 0.5; cursor: not-allowed;">
+            <i class="bi bi-grid-3x3-gap-fill" style="margin-right: 0.4rem;"></i>
+            Ver mi Malla Curricular
+        </button>
+
+    </form>
+
+    <!-- Enlace para cerrar sesión -->
+    <p style="text-align:center; margin-top:1.5rem; font-size:0.8rem; color:#94a3b8;">
+        ¿No sos vos?
+        <a th:href="@{/logout}" style="color:#3b5bdb; text-decoration:none; font-weight:500;">
+            Cerrar sesión
+        </a>
+    </p>
+
+</div>
+
+<!--
+    Dataset de carreras embebido desde Thymeleaf para que JS lo filtre.
+    Cada carrera se representa como un objeto en el array.
+-->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const CARRERAS_DATA = /*[[${carreras}]]*/ [];
+    /*]]>*/
+
+    /**
+     * Filtra el select de Carreras según la institución elegida.
+     * Habilita o deshabilita el segundo select según corresponda.
+     */
+    function filtrarCarreras() {
+        const institucionElegida = document.getElementById('selectInstitucion').value;
+        const selectCarrera      = document.getElementById('carreraId');
+        const btnSubmit          = document.getElementById('btnIrAMalla');
+        const infoBox            = document.getElementById('infoCarrera');
+
+        // Limpiar y bloquear el select de carrera
+        selectCarrera.innerHTML  = '<option value="">— Seleccioná una carrera —</option>';
+        selectCarrera.disabled   = true;
+        btnSubmit.disabled       = true;
+        btnSubmit.style.opacity  = '0.5';
+        btnSubmit.style.cursor   = 'not-allowed';
+        infoBox.classList.remove('visible');
+
+        if (!institucionElegida) return;
+
+        // Filtrar las carreras que pertenecen a esa institución
+        const carrerasFiltradas = CARRERAS_DATA.filter(
+            c => c.institucion === institucionElegida
+        );
+
+        if (carrerasFiltradas.length === 0) {
+            selectCarrera.innerHTML = '<option value="">No hay carreras disponibles</option>';
+            return;
+        }
+
+        carrerasFiltradas.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value       = c.idCarrera;
+            opt.textContent = c.nombre;
+            opt.dataset.duracion = c.duracionAnios;
+            opt.dataset.codigo   = c.codigo;
+            selectCarrera.appendChild(opt);
+        });
+
+        selectCarrera.disabled = false;
+    }
+
+    /**
+     * Muestra información de la carrera seleccionada y habilita el botón.
+     */
+    function mostrarInfoCarrera() {
+        const selectCarrera = document.getElementById('carreraId');
+        const btnSubmit     = document.getElementById('btnIrAMalla');
+        const infoBox       = document.getElementById('infoCarrera');
+        const textoInfo     = document.getElementById('textoInfoCarrera');
+
+        const optElegida = selectCarrera.options[selectCarrera.selectedIndex];
+
+        if (!selectCarrera.value) {
+            btnSubmit.disabled      = true;
+            btnSubmit.style.opacity = '0.5';
+            btnSubmit.style.cursor  = 'not-allowed';
+            infoBox.classList.remove('visible');
+            return;
+        }
+
+        // Mostrar info de la carrera
+        textoInfo.textContent =
+            `Código: ${optElegida.dataset.codigo} · Duración: ${optElegida.dataset.duracion} años`;
+        infoBox.classList.add('visible');
+
+        // Habilitar el botón
+        btnSubmit.disabled      = false;
+        btnSubmit.style.opacity = '1';
+        btnSubmit.style.cursor  = 'pointer';
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>

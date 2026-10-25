@@ -10,6 +10,7 @@ import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
 import com.zebop.sistemasCorrelativas.service.IAcademicoService;
 import com.zebop.sistemasCorrelativas.service.IAlumnoService;
 import com.zebop.sistemasCorrelativas.service.IMateriaService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,15 +50,26 @@ public class PlanEstudioController {
      * y coloreadas según su estado de correlatividad.
      */
     @GetMapping
-    public String verPlan(@RequestParam(required = false) Long alumnoId, Model model) {
+    public String verPlan(@RequestParam(required = false) Long alumnoId, HttpSession session, Model model) {
         String vista;
         List<Alumno> alumnos = alumnoService.obtenerTodos();
+
+        // Si hay usuario logueado en sesión y es ALUMNO, usar su alumno por defecto
+        com.zebop.sistemasCorrelativas.entity.Usuario usuario = 
+            (com.zebop.sistemasCorrelativas.entity.Usuario) session.getAttribute("usuarioLogueado");
+        
+        Long idElegido = alumnoId;
+        if (idElegido == null && usuario != null && usuario.getAlumno() != null) {
+            idElegido = usuario.getAlumno().getIdAlumno();
+        }
 
         if (alumnos.isEmpty()) {
             model.addAttribute("mensajeError", "No hay alumnos cargados en la base de datos.");
             vista = "plan/arbol";
         } else {
-            Long idElegido = (alumnoId != null) ? alumnoId : alumnos.get(0).getIdAlumno();
+            if (idElegido == null) {
+                idElegido = alumnos.get(0).getIdAlumno();
+            }
 
             try {
                 PlanEstudioDTO plan = academicoService.obtenerPlanEstudio(idElegido);

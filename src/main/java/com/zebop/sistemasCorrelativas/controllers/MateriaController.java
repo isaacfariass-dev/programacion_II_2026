@@ -1,16 +1,16 @@
-package com.zebop.sistemasCorrelativas.controller;
+package com.zebop.sistemasCorrelativas.controllers;
 
-import com.zebop.sistemasCorrelativas.entity.Carrera;
-import com.zebop.sistemasCorrelativas.entity.Correlatividad;
-import com.zebop.sistemasCorrelativas.entity.Materia;
-import com.zebop.sistemasCorrelativas.entity.enums.Cuatrimestre;
-import com.zebop.sistemasCorrelativas.entity.enums.TipoRequisito;
+import com.zebop.sistemasCorrelativas.models.Carrera;
+import com.zebop.sistemasCorrelativas.models.Correlatividad;
+import com.zebop.sistemasCorrelativas.models.Materia;
+import com.zebop.sistemasCorrelativas.models.enums.Cuatrimestre;
+import com.zebop.sistemasCorrelativas.models.enums.TipoRequisito;
 import com.zebop.sistemasCorrelativas.exception.CorrelatividadCiclicaException;
 import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
-import com.zebop.sistemasCorrelativas.service.ICarreraService;
-import com.zebop.sistemasCorrelativas.service.ICorrelatividadService;
-import com.zebop.sistemasCorrelativas.service.IMateriaService;
+import com.zebop.sistemasCorrelativas.services.ICarreraService;
+import com.zebop.sistemasCorrelativas.services.ICorrelatividadService;
+import com.zebop.sistemasCorrelativas.services.IMateriaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,10 +1,9 @@
-package com.zebop.sistemasCorrelativas.controller;
+package com.zebop.sistemasCorrelativas.controllers;
 
-import com.zebop.sistemasCorrelativas.entity.Usuario;
-import com.zebop.sistemasCorrelativas.entity.enums.Rol;
+import com.zebop.sistemasCorrelativas.models.Usuario;
 import com.zebop.sistemasCorrelativas.exception.AutenticacionException;
-import com.zebop.sistemasCorrelativas.service.ICarreraService;
-import com.zebop.sistemasCorrelativas.service.IUsuarioService;
+import com.zebop.sistemasCorrelativas.services.ICarreraService;
+import com.zebop.sistemasCorrelativas.services.IUsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Controlador de autenticación: login, logout y selección de carrera.
- * Gestiona la sesión HTTP almacenando el usuario logueado.
+ * Acceso unificado: cualquier usuario autenticado ve las mismas secciones,
+ * sin distinción de roles ni permisos.
  */
 @Controller
 public class AuthController {
@@ -45,9 +45,8 @@ public class AuthController {
 
     /**
      * Procesa el formulario de login.
-     * Autentica con el servicio existente y guarda el usuario en sesión.
-     * Si el usuario es ALUMNO, lo redirige al selector de carrera.
-     * Si es ADMIN, lo redirige directamente al panel de carreras.
+     * Autentica con el servicio existente, guarda el usuario en sesión
+     * y redirige siempre al plan de estudios (vista única para todos).
      */
     @PostMapping("/login")
     public String procesarLogin(@RequestParam String nombreUsuario,
@@ -58,12 +57,7 @@ public class AuthController {
         try {
             Usuario usuario = usuarioService.autenticar(nombreUsuario, clave);
             session.setAttribute("usuarioLogueado", usuario);
-
-            if (usuario.getRol() == Rol.ADMIN) {
-                redireccion = "redirect:/carreras";
-            } else {
-                redireccion = "redirect:/selector-carrera";
-            }
+            redireccion = "redirect:/plan";
         } catch (AutenticacionException e) {
             redirectAttrs.addFlashAttribute("errorLogin", "Usuario o contraseña incorrectos.");
             redireccion = "redirect:/login";
@@ -82,34 +76,36 @@ public class AuthController {
 
     /**
      * Muestra la pantalla de selección de Facultad y Carrera.
-     * Solo accesible para ALUMNO. Carga todas las carreras para los selects.
+     * El filtrado de carreras por institución se resuelve en el servidor
+     * (parámetro opcional "institucion"), sin JavaScript en el cliente:
+     * el primer select se reenvía por GET y la página se repinta con
+     * el segundo select ya filtrado.
      */
     @GetMapping("/selector-carrera")
-    public String mostrarSelectorCarrera(HttpSession session, Model model) {
+    public String mostrarSelectorCarrera(@RequestParam(required = false) String institucion,
+                                         HttpSession session, Model model) {
         String vista;
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
         if (usuario == null) {
             vista = "redirect:/login";
-        } else if (usuario.getRol() == Rol.ADMIN) {
-            vista = "redirect:/carreras";
         } else {
-            model.addAttribute("carreras", carreraService.obtenerTodas());
-            // Extraer instituciones únicas para el primer select (Facultad)
+            var carreras = carreraService.obtenerTodas();
             model.addAttribute("instituciones",
-                carreraService.obtenerTodas().stream()
-                    .map(c -> c.getInstitucion())
-                    .distinct()
-                    .sorted()
-                    .toList()
-            );
+                carreras.stream().map(c -> c.getInstitucion()).distinct().sorted().toList());
+            model.addAttribute("institucionSeleccionada", institucion);
+
+            if (institucion != null && !institucion.isBlank()) {
+                model.addAttribute("carrerasFiltradas",
+                    carreras.stream().filter(c -> c.getInstitucion().equals(institucion)).toList());
+            }
             vista = "auth/selector-carrera";
         }
         return vista;
     }
 
     /**
-     * Procesa la selección de carrera del alumno.
+     * Procesa la selección de carrera.
      * Guarda la carrera elegida en sesión y redirige al plan de estudios.
      */
     @PostMapping("/selector-carrera")

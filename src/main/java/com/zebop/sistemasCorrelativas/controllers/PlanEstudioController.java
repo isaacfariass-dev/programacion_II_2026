@@ -1,15 +1,14 @@
-package com.zebop.sistemasCorrelativas.controller;
+package com.zebop.sistemasCorrelativas.controllers;
 
 import com.zebop.sistemasCorrelativas.dto.PlanEstudioDTO;
-import com.zebop.sistemasCorrelativas.dto.SimulacionResultadoDTO;
-import com.zebop.sistemasCorrelativas.entity.Alumno;
-import com.zebop.sistemasCorrelativas.entity.Materia;
-import com.zebop.sistemasCorrelativas.entity.enums.EstadoMateria;
+import com.zebop.sistemasCorrelativas.models.Alumno;
+import com.zebop.sistemasCorrelativas.models.Materia;
+import com.zebop.sistemasCorrelativas.models.enums.EstadoMateria;
 import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
-import com.zebop.sistemasCorrelativas.service.IAcademicoService;
-import com.zebop.sistemasCorrelativas.service.IAlumnoService;
-import com.zebop.sistemasCorrelativas.service.IMateriaService;
+import com.zebop.sistemasCorrelativas.services.IAcademicoService;
+import com.zebop.sistemasCorrelativas.services.IAlumnoService;
+import com.zebop.sistemasCorrelativas.services.IMateriaService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -54,9 +53,9 @@ public class PlanEstudioController {
         String vista;
         List<Alumno> alumnos = alumnoService.obtenerTodos();
 
-        // Si hay usuario logueado en sesión y es ALUMNO, usar su alumno por defecto
-        com.zebop.sistemasCorrelativas.entity.Usuario usuario = 
-            (com.zebop.sistemasCorrelativas.entity.Usuario) session.getAttribute("usuarioLogueado");
+        // Si el usuario en sesión tiene un alumno vinculado, usarlo por defecto
+        com.zebop.sistemasCorrelativas.models.Usuario usuario = 
+            (com.zebop.sistemasCorrelativas.models.Usuario) session.getAttribute("usuarioLogueado");
         
         Long idElegido = alumnoId;
         if (idElegido == null && usuario != null && usuario.getAlumno() != null) {
@@ -131,7 +130,7 @@ public class PlanEstudioController {
      * Endpoint API para actualización rápida vía AJAX (sin recarga de página).
      * Retorna el plan de estudios actualizado en formato JSON.
      */
-    @PostMapping("/api/actualizar-estado")
+    @PostMapping(value = "/api/actualizar-estado", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public ResponseEntity<?> actualizarEstadoAjax(@RequestParam Long alumnoId,
                                                   @RequestParam Long idMateria,
@@ -153,7 +152,7 @@ public class PlanEstudioController {
     /**
      * Endpoint API para resetear una materia vía AJAX (sin recarga de página).
      */
-    @PostMapping("/api/resetear-materia")
+    @PostMapping(value = "/api/resetear-materia", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public ResponseEntity<?> resetearMateriaAjax(@RequestParam Long alumnoId,
                                                 @RequestParam Long idMateria) {
@@ -168,35 +167,5 @@ public class PlanEstudioController {
             respuesta = ResponseEntity.badRequest().body(errorMap);
         }
         return respuesta;
-    }
-
-    /**
-     * Muestra la interfaz del simulador "¿Qué pasa si apruebo X materia?".
-     */
-    @GetMapping("/simulador")
-    public String simulador(@RequestParam(required = false) Long alumnoId,
-                            @RequestParam(required = false) Long idMateria,
-                            Model model) {
-        String vista = "plan/simulador";
-        List<Alumno> alumnos = alumnoService.obtenerTodos();
-
-        if (!alumnos.isEmpty()) {
-            Long idElegido = (alumnoId != null) ? alumnoId : alumnos.get(0).getIdAlumno();
-            Alumno alumno = alumnoService.obtenerPorId(idElegido);
-            List<Materia> materias = materiaService.obtenerPorCarrera(alumno.getCarrera().getIdCarrera());
-
-            model.addAttribute("alumnos", alumnos);
-            model.addAttribute("alumnoActualId", idElegido);
-            model.addAttribute("alumno", alumno);
-            model.addAttribute("materias", materias);
-
-            if (idMateria != null) {
-                SimulacionResultadoDTO simulacion = academicoService.simularAprobacion(idElegido, idMateria);
-                model.addAttribute("simulacion", simulacion);
-                model.addAttribute("materiaSeleccionadaId", idMateria);
-            }
-        }
-
-        return vista;
     }
 }

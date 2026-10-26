@@ -1,9 +1,9 @@
-package com.zebop.sistemasCorrelativas.controller;
+package com.zebop.sistemasCorrelativas.controllers;
 
-import com.zebop.sistemasCorrelativas.entity.Carrera;
+import com.zebop.sistemasCorrelativas.models.Carrera;
 import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
-import com.zebop.sistemasCorrelativas.service.ICarreraService;
+import com.zebop.sistemasCorrelativas.services.ICarreraService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

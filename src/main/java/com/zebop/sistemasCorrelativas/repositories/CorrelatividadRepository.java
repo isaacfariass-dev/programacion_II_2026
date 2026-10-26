@@ -1,7 +1,7 @@
-package com.zebop.sistemasCorrelativas.repository;
+package com.zebop.sistemasCorrelativas.repositories;
 
-import com.zebop.sistemasCorrelativas.entity.Correlatividad;
-import com.zebop.sistemasCorrelativas.entity.CorrelatividadId;
+import com.zebop.sistemasCorrelativas.models.Correlatividad;
+import com.zebop.sistemasCorrelativas.models.CorrelatividadId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,5 +1,5 @@
-package com.zebop.sistemasCorrelativas.repository;
-import com.zebop.sistemasCorrelativas.entity.Alumno;
+package com.zebop.sistemasCorrelativas.repositories;
+import com.zebop.sistemasCorrelativas.models.Alumno;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

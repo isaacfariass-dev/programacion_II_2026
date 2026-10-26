@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.repository;
+package com.zebop.sistemasCorrelativas.repositories;
 
-import com.zebop.sistemasCorrelativas.entity.Carrera;
+import com.zebop.sistemasCorrelativas.models.Carrera;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

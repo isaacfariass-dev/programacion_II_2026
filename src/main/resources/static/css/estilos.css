@@ -537,76 +537,275 @@ main {
 /* =====================================================================
    Tablero scrollable de columnas
    ===================================================================== */
+/* =====================================================================
+   Malla Curricular Unimalla Style (Layout & Proporciones)
+   ===================================================================== */
+.malla-contenedor {
+    display: flex;
+    width: fit-content;
+    min-width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    gap: 24px;
+    padding: 30px;
+    align-items: flex-start;
+    min-height: 100vh;
+    background-color: #f8fafc;
+}
+
+.malla-contenedor::-webkit-scrollbar,
+.malla-tablero::-webkit-scrollbar {
+    height: 8px;
+}
+.malla-contenedor::-webkit-scrollbar-track,
+.malla-tablero::-webkit-scrollbar-track {
+    background: var(--border);
+    border-radius: 10px;
+}
+.malla-contenedor::-webkit-scrollbar-thumb,
+.malla-tablero::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 10px;
+}
+.malla-contenedor::-webkit-scrollbar-thumb:hover,
+.malla-tablero::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+.columna-anio {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 220px;
+    flex: 0 0 auto;
+}
+
+.columna-anio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.columna-anio-titulo {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.columna-anio-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: #e2e8f0;
+    color: #475569;
+    border-radius: 999px;
+    padding: 0.2rem 0.55rem;
+}
+
+.materia-card {
+    width: 100%;
+    min-height: 90px;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    user-select: none;
+    border: 2px solid transparent;
+}
+
+/* =====================================================================
+   Colores exactos estilo Unimalla (Estados)
+   ===================================================================== */
+.estado-aprobada {
+    background-color: #3b82f6 !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+}
+
+.estado-aprobada .card-codigo,
+.estado-aprobada .card-nombre,
+.estado-aprobada .card-meta {
+    color: #ffffff !important;
+}
+
+.estado-disponible {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    border-color: #e2e8f0 !important;
+}
+
+.estado-disponible:hover {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+}
+
+.estado-disponible .card-codigo {
+    color: #64748b !important;
+}
+
+.estado-disponible .card-nombre {
+    color: #1e293b !important;
+}
+
+.estado-bloqueada {
+    background-color: #f1f5f9 !important;
+    color: #94a3b8 !important;
+    border-color: #e2e8f0 !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.estado-bloqueada .card-codigo,
+.estado-bloqueada .card-nombre,
+.estado-bloqueada .card-meta {
+    color: #94a3b8 !important;
+}
+
+.estado-habilitada {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    border-color: #e2e8f0 !important;
+}
+
+.estado-habilitada:hover {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+}
+
+.estado-regular {
+    background-color: #fef3c7 !important;
+    color: #92400e !important;
+    border-color: #fbbf24 !important;
+}
+
+.estado-desaprobada {
+    background-color: #fee2e2 !important;
+    color: #b91c1c !important;
+    border-color: #fca5a5 !important;
+}
+
+/* Acciones de la tarjeta: formularios server-side para cambiar el estado, sin JS */
+.card-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: 100%;
+    margin-top: 0.4rem;
+}
+
+.form-estado-mini {
+    display: flex;
+    gap: 0.2rem;
+    width: 100%;
+}
+
+.select-mini,
+.input-mini {
+    font-size: 0.62rem;
+    padding: 2px 3px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    min-width: 0;
+}
+
+.select-mini {
+    flex: 1.4;
+}
+
+.input-mini {
+    flex: 1;
+}
+
+.btn-mini {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: none;
+    background: var(--accent);
+    color: #ffffff;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-mini:hover {
+    opacity: 0.9;
+}
+
+.btn-mini-secondary {
+    width: 100%;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+/* Compatibilidad retroactiva con .malla-card y layout tradicional */
 .malla-tablero-wrapper {
     width: 100%;
+    overflow-x: auto;
 }
 
 .malla-tablero {
     display: flex;
-    gap: 1rem;
     overflow-x: auto;
-    padding: 0.25rem 0.25rem 1.5rem 0.25rem;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
+    gap: 24px;
+    padding: 20px 10px;
+    align-items: flex-start;
 }
 
-.malla-tablero::-webkit-scrollbar { height: 8px; }
-.malla-tablero::-webkit-scrollbar-track { background: var(--border); border-radius: 10px; }
-.malla-tablero::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
-.malla-tablero::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
-
-/* =====================================================================
-   Columnas por Año
-   ===================================================================== */
 .malla-columna {
-    flex: 0 0 262px;
-    min-width: 262px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 0.9rem;
-    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
+    gap: 16px;
+    min-width: 220px;
+    flex: 0 0 auto;
 }
 
 .malla-col-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    padding-bottom: 0.75rem;
-    margin-bottom: 0.75rem;
+    align-items: center;
+    padding-bottom: 0.45rem;
+    margin-bottom: 0.5rem;
     border-bottom: 1px solid var(--border);
 }
 
 .malla-col-titulo {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--text-primary);
     margin: 0;
 }
 
 .malla-col-subtitulo {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: var(--text-muted);
-    margin-top: 0.1rem;
+    margin-top: 0.05rem;
 }
 
 .malla-col-badge {
-    font-size: 0.68rem;
+    font-size: 0.625rem;
     font-weight: 600;
     background: var(--accent-light);
     color: var(--accent);
     border: 1px solid var(--accent-border);
     border-radius: 999px;
-    padding: 0.2rem 0.6rem;
+    padding: 0.15rem 0.45rem;
     white-space: nowrap;
 }
 
 .malla-col-body {
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.45rem;
     flex: 1;
 }
 
@@ -614,10 +813,10 @@ main {
    Tarjetas de Materia
    ===================================================================== */
 .malla-card {
-    border: 1.5px solid var(--border);
-    border-left-width: 4px;
-    border-radius: var(--radius-md);
-    padding: 0.8rem 0.85rem;
+    border: 1px solid var(--border);
+    border-left: 3.5px solid var(--bloqueada);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.6rem;
     cursor: pointer;
     transition:
         transform var(--transition),
@@ -627,15 +826,15 @@ main {
         background-color var(--transition);
     position: relative;
     user-select: none;
-    background: var(--bg-surface);
+    background: #f8fafc;
 }
 
 .malla-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
-/* — Estado: Aprobada — */
+/* — Estado: Aprobada (Verde) — */
 .malla-card.estado-aprobada {
     background: var(--aprobada-bg);
     border-color: var(--aprobada-border);
@@ -643,24 +842,23 @@ main {
 }
 
 .malla-card.estado-aprobada .card-nombre {
-    text-decoration: line-through;
-    color: var(--aprobada);
-    opacity: 0.8;
+    text-decoration: none !important;
+    color: var(--text-primary);
 }
 
-/* — Estado: Habilitada (disponible para cursar) — */
-.malla-card.estado-habilitada {
-    background: var(--habilitada-bg);
-    border-color: var(--habilitada-border);
-    border-left-color: #d97706 !important;
+/* — Estado Base / Habilitada / Bloqueada (Gris Neutro sin amarillo) — */
+.malla-card.estado-habilitada,
+.malla-card.estado-base {
+    background: #ffffff;
+    border-color: var(--border);
+    border-left-color: #94a3b8 !important;
 }
 
-/* — Estado: Bloqueada — */
 .malla-card.estado-bloqueada {
-    background: var(--bloqueada-bg);
-    border-color: var(--bloqueada-border);
-    border-left-color: var(--bloqueada) !important;
-    opacity: 0.72;
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    border-left-color: #64748b !important;
+    opacity: 0.82;
     cursor: not-allowed;
 }
 
@@ -674,60 +872,114 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.25rem;
 }
 
 .card-codigo {
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     font-weight: 700;
     font-family: 'Inter', monospace;
     color: var(--text-muted);
-    background: rgba(0,0,0,0.045);
-    padding: 2px 7px;
-    border-radius: 4px;
+    background: rgba(0,0,0,0.04);
+    padding: 1px 5px;
+    border-radius: 3px;
     letter-spacing: 0.02em;
 }
 
 .card-badge {
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     font-weight: 600;
-    padding: 2px 7px;
+    padding: 1px 5px;
     border-radius: 999px;
     border: 1px solid transparent;
+    line-height: 1.2;
 }
 
-.card-badge.aprobada  { background: #d1fae5; color: var(--aprobada); border-color: #6ee7b7; }
-.card-badge.habilitada{ background: #fef3c7; color: #92400e;         border-color: #fcd34d; }
-.card-badge.bloqueada { background: #f1f5f9; color: var(--bloqueada); border-color: var(--border); }
+.card-badge.aprobada    { background: #d1fae5; color: var(--aprobada);  border-color: #6ee7b7; }
+.card-badge.habilitada  { background: #fef3c7; color: #92400e;          border-color: #fcd34d; }
+.card-badge.regular     { background: #fef3c7; color: #92400e;          border-color: #fcd34d; }
+.card-badge.desaprobada { background: #fee2e2; color: #b91c1c;          border-color: #fca5a5; }
+.card-badge.bloqueada   { background: #f1f5f9; color: var(--bloqueada); border-color: var(--border); }
 
 .card-nombre {
-    font-size: 0.88rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    line-height: 1.3;
+    line-height: 1.25;
     color: var(--text-primary);
-    margin: 0 0 0.45rem 0;
+    margin: 0 0 0.25rem 0;
     transition: color var(--transition), text-decoration var(--transition);
+    word-break: break-word;
+}
+
+/* Requisitos previos debajo del nombre */
+.card-requisitos {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-bottom: 0.35rem;
+    font-size: 0.625rem;
+}
+
+.card-req-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.card-req-tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.2rem;
+}
+
+.card-req-tag {
+    font-size: 0.58rem;
+    font-family: 'Inter', monospace;
+    padding: 0 4px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    line-height: 1.3;
+}
+
+.card-req-tag.req-cumplido {
+    background: #dcfce7;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+
+.card-req-tag.req-pendiente {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.card-sin-requisitos .card-req-label {
+    font-style: italic;
+    font-weight: normal;
+    font-size: 0.58rem;
 }
 
 .card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 0.45rem;
+    padding-top: 0.25rem;
     border-top: 1px solid var(--border);
 }
 
 .card-meta {
-    font-size: 0.72rem;
+    font-size: 0.625rem;
     color: var(--text-muted);
     display: flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.25rem;
 }
 
 /* Ícono de check/lock superpuesto */
 .card-estado-icon {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     line-height: 1;
 }
 
@@ -846,6 +1098,11 @@ main {
 
 .sicra-table tr:hover td {
     background: var(--bg-subtle);
+}
+
+/* Limpieza de tachados: texto siempre limpio */
+.card-nombre {
+    text-decoration: none !important;
 }
 
 /* =====================================================================

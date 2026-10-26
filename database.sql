@@ -25,14 +25,13 @@ CREATE TABLE IF NOT EXISTS alumno (
         ON UPDATE CASCADE
 );
 
--- 3. Tabla: Usuario (Gestión de credenciales y roles)
--- Relación 1:1 opcional con alumno (NULL si el rol es ADMIN)
+-- 3. Tabla: Usuario (Gestión de credenciales de acceso, sin roles)
+-- Acceso unificado: la relación 1:1 opcional con alumno es solo para vincular el plan de estudios
 CREATE TABLE IF NOT EXISTS usuario (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    id_alumno INT UNIQUE NULL COMMENT 'Clave foránea UNIQUE (1:1). Es NULL para administradores',
+    id_alumno INT UNIQUE NULL COMMENT 'Clave foránea UNIQUE (1:1), opcional',
     nombre_usuario VARCHAR(50) UNIQUE NOT NULL,
     clave VARCHAR(255) NOT NULL,
-    rol ENUM('ADMIN', 'ALUMNO') NOT NULL,
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_usuario_alumno 
         FOREIGN KEY (id_alumno) 
@@ -103,34 +102,57 @@ INSERT INTO carrera (id_carrera, codigo, nombre, institucion, duracion_anios) VA
 (1, 'INF-APLICADA', 'Tecnicatura Superior en Informática Aplicada', 'UTN - INSPT', 3)
 ON DUPLICATE KEY UPDATE nombre = VALUES(nombre);
 
--- 2. Materias
+-- 2. Materias (Plan 2006 - Tecnicatura Superior en Informática Aplicada)
 INSERT INTO materia (id_materia, id_carrera, codigo, nombre, anio_plan, cuatrimestre, carga_horaria) VALUES
-(1, 1, 'PROG-1', 'Programación I', 1, 'PRIMER_CUATRIMESTRE', 64),
-(2, 1, 'ARQ-1', 'Arquitectura de Computadoras', 1, 'PRIMER_CUATRIMESTRE', 64),
-(3, 1, 'BD-1', 'Bases de Datos I', 1, 'SEGUNDO_CUATRIMESTRE', 64),
-(4, 1, 'PROG-2', 'Programación II', 1, 'SEGUNDO_CUATRIMESTRE', 64),
-(5, 1, 'PROG-3', 'Programación III', 2, 'PRIMER_CUATRIMESTRE', 64),
-(6, 1, 'BD-2', 'Bases de Datos II', 2, 'PRIMER_CUATRIMESTRE', 64),
-(7, 1, 'ING-SOFT', 'Ingeniería de Software', 2, 'SEGUNDO_CUATRIMESTRE', 64),
-(8, 1, 'PRACT-PROF', 'Práctica Profesional Supervisada', 3, 'SEGUNDO_CUATRIMESTRE', 96)
-ON DUPLICATE KEY UPDATE nombre = VALUES(nombre);
+-- Año 1
+(1, 1, 'AM-1', 'Análisis Matemático I', 1, 'ANUAL', 96),
+(2, 1, 'CFQ', 'Complementos de Física y Química', 1, 'ANUAL', 96),
+(3, 1, 'EYO', 'Economía y Organización', 1, 'ANUAL', 64),
+(4, 1, 'ING-1', 'Inglés Técnico I', 1, 'ANUAL', 64),
+(5, 1, 'LAB', 'Laboratorio', 1, 'ANUAL', 96),
+(6, 1, 'PROG-1', 'Programación I', 1, 'ANUAL', 128),
+(7, 1, 'APE', 'Álgebra, Probabilidades y Estadística', 1, 'ANUAL', 96),
+
+-- Año 2
+(8, 1, 'AM-2', 'Análisis Matemático II', 2, 'ANUAL', 96),
+(9, 1, 'EBD', 'Estructura y Base de Datos', 2, 'ANUAL', 128),
+(10, 1, 'ING-2', 'Inglés Técnico II', 2, 'ANUAL', 64),
+(11, 1, 'MD', 'Modelos Discretos', 2, 'ANUAL', 96),
+(12, 1, 'PROG-2', 'Programación II', 2, 'ANUAL', 128),
+(13, 1, 'SC-1', 'Sistemas de Computación I', 2, 'ANUAL', 96),
+
+-- Año 3
+(14, 1, 'ING-3', 'Inglés Técnico III', 3, 'ANUAL', 64),
+(15, 1, 'PA', 'Probabilidad Aplicada', 3, 'ANUAL', 96),
+(16, 1, 'PRC', 'Problemática de la Realidad Contemporánea', 3, 'ANUAL', 64),
+(17, 1, 'PROG-3', 'Programación III', 3, 'ANUAL', 128),
+(18, 1, 'SEM', 'Seminario', 3, 'ANUAL', 96),
+(19, 1, 'SC-2', 'Sistemas de Computación II', 3, 'ANUAL', 96),
+(20, 1, 'TD', 'Técnicas Digitales', 3, 'ANUAL', 96)
+ON DUPLICATE KEY UPDATE nombre = VALUES(nombre), anio_plan = VALUES(anio_plan);
 
 -- 3. Correlatividades (Requisitos directos)
--- Prog 2 necesita Prog 1 (REGULAR)
--- BD 1 necesita Arq 1 (REGULAR)
--- Prog 3 necesita Prog 2 (APROBADA)
--- BD 2 necesita BD 1 (APROBADA)
--- Ing Soft necesita Prog 2 (APROBADA) y BD 1 (APROBADA)
--- Practica Prof necesita Prog 3 (APROBADA) e Ing Soft (REGULAR)
+-- Inglés Técnico III <- Inglés Técnico II
+-- Probabilidad Aplicada <- Modelos Discretos, Análisis Matemático II
+-- Programación III <- Programación II, Sistemas de Computación I, Estructura y Base de Datos
+-- Seminario <- Modelos Discretos, Programación II, Sistemas de Computación I, Estructura y Base de Datos
+-- Sistemas de Computación II <- Sistemas de Computación I, Estructura y Base de Datos
+-- Técnicas Digitales <- Modelos Discretos, Sistemas de Computación I
 INSERT INTO correlatividad (id_materia_destino, id_materia_requisito, tipo_requisito) VALUES
-(4, 1, 'REGULAR'),
-(3, 2, 'REGULAR'),
-(5, 4, 'APROBADA'),
-(6, 3, 'APROBADA'),
-(7, 4, 'APROBADA'),
-(7, 3, 'APROBADA'),
-(8, 5, 'APROBADA'),
-(8, 7, 'REGULAR')
+(14, 10, 'APROBADA'),
+(15, 11, 'APROBADA'),
+(15, 8, 'APROBADA'),
+(17, 12, 'APROBADA'),
+(17, 13, 'APROBADA'),
+(17, 9, 'APROBADA'),
+(18, 11, 'APROBADA'),
+(18, 12, 'APROBADA'),
+(18, 13, 'APROBADA'),
+(18, 9, 'APROBADA'),
+(19, 13, 'APROBADA'),
+(19, 9, 'APROBADA'),
+(20, 11, 'APROBADA'),
+(20, 13, 'APROBADA')
 ON DUPLICATE KEY UPDATE tipo_requisito = VALUES(tipo_requisito);
 
 -- 4. Alumno de prueba
@@ -138,21 +160,9 @@ INSERT INTO alumno (id_alumno, id_carrera, legajo, nombre, apellido, anio_ingres
 (1, 1, 'ALU-2024-001', 'Juan', 'Pérez', 2024)
 ON DUPLICATE KEY UPDATE nombre = VALUES(nombre);
 
--- 5. Usuarios de prueba (1 Admin y 1 Alumno con relación 1:1)
-INSERT INTO usuario (id_usuario, id_alumno, nombre_usuario, clave, rol) VALUES
-(1, NULL, 'admin', 'admin123', 'ADMIN'),
-(2, 1, 'alumno', 'alumno123', 'ALUMNO')
+-- 5. Usuarios de prueba (acceso unificado, sin distinción de roles)
+INSERT INTO usuario (id_usuario, id_alumno, nombre_usuario, clave) VALUES
+(1, NULL, 'admin', 'admin123'),
+(2, 1, 'alumno', 'alumno123')
 ON DUPLICATE KEY UPDATE nombre_usuario = VALUES(nombre_usuario);
-
--- 6. Historial Académico para el alumno Juan Pérez (id_alumno = 1)
--- Prog 1: APROBADA (nota 9.00)
--- Arq 1: APROBADA (nota 8.00)
--- BD 1: REGULAR (sin nota numérica aún)
--- Prog 2: CURSANDO
-INSERT INTO historial_academico (id_alumno, id_materia, estado, nota_final) VALUES
-(1, 1, 'APROBADA', 9.00),
-(1, 2, 'APROBADA', 8.00),
-(1, 3, 'REGULAR', NULL),
-(1, 4, 'CURSANDO', NULL)
-ON DUPLICATE KEY UPDATE estado = VALUES(estado);
 

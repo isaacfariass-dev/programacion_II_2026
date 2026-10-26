@@ -1,4 +1,4 @@
-package com.zebop.sistemasCorrelativas.entity.enums;
+package com.zebop.sistemasCorrelativas.models.enums;
 
 /**
  * Tipo de condición exigida en una correlatividad.

@@ -1,7 +1,7 @@
 package com.zebop.sistemasCorrelativas.dto;
 
-import com.zebop.sistemasCorrelativas.entity.Alumno;
-import com.zebop.sistemasCorrelativas.entity.Carrera;
+import com.zebop.sistemasCorrelativas.models.Alumno;
+import com.zebop.sistemasCorrelativas.models.Carrera;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

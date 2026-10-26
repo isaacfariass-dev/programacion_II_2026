@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.entity;
+package com.zebop.sistemasCorrelativas.models;
 
-import com.zebop.sistemasCorrelativas.entity.enums.Cuatrimestre;
+import com.zebop.sistemasCorrelativas.models.enums.Cuatrimestre;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;

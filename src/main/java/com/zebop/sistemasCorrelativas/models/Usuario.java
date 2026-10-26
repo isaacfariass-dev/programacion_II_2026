@@ -1,15 +1,14 @@
-package com.zebop.sistemasCorrelativas.entity;
+package com.zebop.sistemasCorrelativas.models;
 
-import com.zebop.sistemasCorrelativas.entity.enums.Rol;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.*;
 /**
- * Entidad que gestiona las credenciales y roles de acceso.
+ * Entidad que gestiona las credenciales de acceso al sistema.
  * Mapea la tabla 'usuario' de la base de datos.
- * Posee una relación 1:1 opcional con Alumno (NULL para administradores).
+ * Acceso unificado: no distingue roles, solo vincula opcionalmente con un Alumno.
  */
 @Entity
 @Getter
@@ -36,10 +35,6 @@ public class Usuario implements Serializable {
     @Column(name = "clave", nullable = false, length = 255)
     private String clave;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "rol", nullable = false)
-    private Rol rol;
-
     @Column(name = "fecha_creacion", insertable = false, updatable = false)
     private LocalDateTime fechaCreacion;
 
@@ -58,10 +53,6 @@ public class Usuario implements Serializable {
 
     public void setClave(String clave) {
         this.clave = clave;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
     }
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {

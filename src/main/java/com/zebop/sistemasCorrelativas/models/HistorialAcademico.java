@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.entity;
+package com.zebop.sistemasCorrelativas.models;
 
-import com.zebop.sistemasCorrelativas.entity.enums.EstadoMateria;
+import com.zebop.sistemasCorrelativas.models.enums.EstadoMateria;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;

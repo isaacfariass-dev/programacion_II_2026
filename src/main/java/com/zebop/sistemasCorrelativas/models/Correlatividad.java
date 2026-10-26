@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.entity;
+package com.zebop.sistemasCorrelativas.models;
 
-import com.zebop.sistemasCorrelativas.entity.enums.TipoRequisito;
+import com.zebop.sistemasCorrelativas.models.enums.TipoRequisito;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package com.zebop.sistemasCorrelativas.entity.enums;
+package com.zebop.sistemasCorrelativas.models.enums;
 
 /**
  * Periodo académico en el que se dicta una materia.

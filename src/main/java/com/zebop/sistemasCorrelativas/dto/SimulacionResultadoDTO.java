@@ -1,6 +1,6 @@
 package com.zebop.sistemasCorrelativas.dto;
 
-import com.zebop.sistemasCorrelativas.entity.Materia;
+import com.zebop.sistemasCorrelativas.models.Materia;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

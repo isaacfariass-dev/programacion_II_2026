@@ -1,6 +1,6 @@
 package com.zebop.sistemasCorrelativas.dto;
 
-import com.zebop.sistemasCorrelativas.entity.enums.TipoRequisito;
+import com.zebop.sistemasCorrelativas.models.enums.TipoRequisito;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

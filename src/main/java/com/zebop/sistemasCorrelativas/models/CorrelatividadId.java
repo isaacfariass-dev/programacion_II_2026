@@ -1,4 +1,4 @@
-package com.zebop.sistemasCorrelativas.entity;
+package com.zebop.sistemasCorrelativas.models;
 
 import java.io.Serializable;
 import java.util.Objects;

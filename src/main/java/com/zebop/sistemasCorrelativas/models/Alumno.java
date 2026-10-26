@@ -1,4 +1,4 @@
-package com.zebop.sistemasCorrelativas.entity;
+package com.zebop.sistemasCorrelativas.models;
 
 import jakarta.persistence.*;
 import java.io.Serializable;

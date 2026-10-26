@@ -45,24 +45,13 @@
 
         <div style="margin-bottom: 1.5rem;">
             <label for="clave" class="form-label-sicra">Contraseña</label>
-            <div style="position: relative;">
-                <input
-                    type="password"
-                    id="clave"
-                    name="clave"
-                    class="form-control-sicra"
-                    placeholder="••••••••"
-                    required
-                    style="padding-right: 2.75rem;">
-                <!-- Botón para mostrar/ocultar contraseña -->
-                <button type="button"
-                        onclick="togglePassword()"
-                        style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);
-                               background:none;border:none;cursor:pointer;color:#94a3b8;padding:0;"
-                        title="Mostrar contraseña">
-                    <i class="bi bi-eye" id="iconoOjo"></i>
-                </button>
-            </div>
+            <input
+                type="password"
+                id="clave"
+                name="clave"
+                class="form-control-sicra"
+                placeholder="••••••••"
+                required>
         </div>
 
         <button type="submit" class="btn-primary-sicra">
@@ -78,20 +67,6 @@
     </p>
 
 </div>
-
-<script>
-    function togglePassword() {
-        const input = document.getElementById('clave');
-        const icon  = document.getElementById('iconoOjo');
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.className = 'bi bi-eye-slash';
-        } else {
-            input.type = 'password';
-            icon.className = 'bi bi-eye';
-        }
-    }
-</script>
 
 </body>
 </html>

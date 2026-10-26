@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso denegado — SICRA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main style="padding: 3rem 2rem; text-align: center;">
+    <i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: #64748b;"></i>
+    <h1 style="margin-top: 1rem;">Acceso denegado</h1>
+    <p>No cuenta con los permisos necesarios para ver esta sección.</p>
+    <a th:href="@{/plan}">Volver a la malla curricular</a>
+</main>
+</body>
+</html>

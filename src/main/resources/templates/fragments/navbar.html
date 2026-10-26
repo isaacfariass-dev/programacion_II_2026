@@ -10,46 +10,33 @@
         SICRA
     </a>
 
-    <!-- Links de navegación según rol -->
+    <!-- Vista unificada: todo usuario autenticado ve todas las secciones, sin distinción de roles -->
     <ul class="nav-links" th:if="${session.usuarioLogueado != null}">
 
-        <!-- Alumno ve: Plan y Simulador -->
-        <th:block th:if="${session.usuarioLogueado.rol.name() == 'ALUMNO'}">
-            <li>
-                <a th:href="@{/plan}">
-                    <i class="bi bi-grid-3x3-gap-fill" style="margin-right:0.3rem;font-size:0.85rem;"></i>
-                    Malla Curricular
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/plan/simulador}">
-                    <i class="bi bi-lightning-charge-fill" style="margin-right:0.3rem;font-size:0.85rem;"></i>
-                    Simulador
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/selector-carrera}">
-                    <i class="bi bi-arrow-left-right" style="margin-right:0.3rem;font-size:0.85rem;"></i>
-                    Cambiar Carrera
-                </a>
-            </li>
-        </th:block>
-
-        <!-- Admin ve: Carreras y Materias -->
-        <th:block th:if="${session.usuarioLogueado.rol.name() == 'ADMIN'}">
-            <li>
-                <a th:href="@{/carreras}">
-                    <i class="bi bi-journal-bookmark-fill" style="margin-right:0.3rem;font-size:0.85rem;"></i>
-                    Carreras
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/materias}">
-                    <i class="bi bi-book-fill" style="margin-right:0.3rem;font-size:0.85rem;"></i>
-                    Materias
-                </a>
-            </li>
-        </th:block>
+        <li>
+            <a th:href="@{/plan}">
+                <i class="bi bi-grid-3x3-gap-fill" style="margin-right:0.3rem;font-size:0.85rem;"></i>
+                Malla Curricular
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/selector-carrera}">
+                <i class="bi bi-arrow-left-right" style="margin-right:0.3rem;font-size:0.85rem;"></i>
+                Cambiar Carrera
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/carreras}">
+                <i class="bi bi-journal-bookmark-fill" style="margin-right:0.3rem;font-size:0.85rem;"></i>
+                Carreras
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/materias}">
+                <i class="bi bi-book-fill" style="margin-right:0.3rem;font-size:0.85rem;"></i>
+                Materias
+            </a>
+        </li>
 
     </ul>
 
@@ -62,11 +49,6 @@
                 U
             </div>
             <span th:text="${session.usuarioLogueado.nombreUsuario}">usuario</span>
-            <span style="color:#cbd5e1; margin: 0 0.1rem;">·</span>
-            <span th:text="${session.usuarioLogueado.rol.name()}"
-                  style="color:#94a3b8; font-size:0.72rem; text-transform: uppercase; letter-spacing:0.04em;">
-                ROL
-            </span>
         </div>
 
         <a th:href="@{/logout}" class="btn-logout" title="Cerrar sesión">

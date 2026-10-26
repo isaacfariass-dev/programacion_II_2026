@@ -1,10 +1,10 @@
-package com.zebop.sistemasCorrelativas.service.impl;
+package com.zebop.sistemasCorrelativas.services.impl;
 
-import com.zebop.sistemasCorrelativas.entity.Carrera;
+import com.zebop.sistemasCorrelativas.models.Carrera;
 import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
-import com.zebop.sistemasCorrelativas.repository.CarreraRepository;
-import com.zebop.sistemasCorrelativas.service.ICarreraService;
+import com.zebop.sistemasCorrelativas.repositories.CarreraRepository;
+import com.zebop.sistemasCorrelativas.services.ICarreraService;
 import com.zebop.sistemasCorrelativas.util.Constantes;
 import org.springframework.stereotype.Service;
 

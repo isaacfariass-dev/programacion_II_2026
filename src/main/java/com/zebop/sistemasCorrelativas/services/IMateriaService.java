@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.service;
+package com.zebop.sistemasCorrelativas.services;
 
-import com.zebop.sistemasCorrelativas.entity.Materia;
+import com.zebop.sistemasCorrelativas.models.Materia;
 import java.util.List;
 
 public interface IMateriaService {

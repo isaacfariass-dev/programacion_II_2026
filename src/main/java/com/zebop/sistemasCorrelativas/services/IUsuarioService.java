@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.service;
+package com.zebop.sistemasCorrelativas.services;
 
-import com.zebop.sistemasCorrelativas.entity.Usuario;
+import com.zebop.sistemasCorrelativas.models.Usuario;
 import java.util.List;
 
 public interface IUsuarioService {

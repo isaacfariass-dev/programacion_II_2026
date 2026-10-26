@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.service;
+package com.zebop.sistemasCorrelativas.services;
 
-import com.zebop.sistemasCorrelativas.entity.Alumno;
+import com.zebop.sistemasCorrelativas.models.Alumno;
 import java.util.List;
 
 public interface IAlumnoService {

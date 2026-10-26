@@ -1,10 +1,10 @@
-package com.zebop.sistemasCorrelativas.service.impl;
+package com.zebop.sistemasCorrelativas.services.impl;
 
-import com.zebop.sistemasCorrelativas.entity.HistorialAcademico;
+import com.zebop.sistemasCorrelativas.models.HistorialAcademico;
 import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
-import com.zebop.sistemasCorrelativas.repository.HistorialAcademicoRepository;
-import com.zebop.sistemasCorrelativas.service.IHistorialAcademicoService;
+import com.zebop.sistemasCorrelativas.repositories.HistorialAcademicoRepository;
+import com.zebop.sistemasCorrelativas.services.IHistorialAcademicoService;
 import com.zebop.sistemasCorrelativas.util.Constantes;
 import org.springframework.stereotype.Service;
 

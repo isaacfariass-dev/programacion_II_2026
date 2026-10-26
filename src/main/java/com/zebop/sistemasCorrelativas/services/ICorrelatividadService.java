@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.service;
+package com.zebop.sistemasCorrelativas.services;
 
-import com.zebop.sistemasCorrelativas.entity.Correlatividad;
+import com.zebop.sistemasCorrelativas.models.Correlatividad;
 import java.util.List;
 
 public interface ICorrelatividadService {

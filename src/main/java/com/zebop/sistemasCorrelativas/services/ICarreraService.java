@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.service;
+package com.zebop.sistemasCorrelativas.services;
 
-import com.zebop.sistemasCorrelativas.entity.Carrera;
+import com.zebop.sistemasCorrelativas.models.Carrera;
 import java.util.List;
 
 public interface ICarreraService {

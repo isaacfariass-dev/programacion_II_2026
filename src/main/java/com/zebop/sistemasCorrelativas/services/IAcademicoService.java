@@ -1,8 +1,8 @@
-package com.zebop.sistemasCorrelativas.service;
+package com.zebop.sistemasCorrelativas.services;
 
 import com.zebop.sistemasCorrelativas.dto.PlanEstudioDTO;
 import com.zebop.sistemasCorrelativas.dto.SimulacionResultadoDTO;
-import com.zebop.sistemasCorrelativas.entity.enums.EstadoMateria;
+import com.zebop.sistemasCorrelativas.models.enums.EstadoMateria;
 
 /**
  * Servicio encargado de la lógica central de SICRA:

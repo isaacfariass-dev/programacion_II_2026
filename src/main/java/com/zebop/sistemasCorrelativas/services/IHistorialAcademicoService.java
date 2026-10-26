@@ -1,6 +1,6 @@
-package com.zebop.sistemasCorrelativas.service;
+package com.zebop.sistemasCorrelativas.services;
 
-import com.zebop.sistemasCorrelativas.entity.HistorialAcademico;
+import com.zebop.sistemasCorrelativas.models.HistorialAcademico;
 import java.util.List;
 
 public interface IHistorialAcademicoService {

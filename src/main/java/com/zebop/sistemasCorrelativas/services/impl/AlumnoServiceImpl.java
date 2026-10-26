@@ -1,10 +1,10 @@
-package com.zebop.sistemasCorrelativas.service.impl;
+package com.zebop.sistemasCorrelativas.services.impl;
 
-import com.zebop.sistemasCorrelativas.entity.Alumno;
+import com.zebop.sistemasCorrelativas.models.Alumno;
 import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
-import com.zebop.sistemasCorrelativas.repository.AlumnoRepository;
-import com.zebop.sistemasCorrelativas.service.IAlumnoService;
+import com.zebop.sistemasCorrelativas.repositories.AlumnoRepository;
+import com.zebop.sistemasCorrelativas.services.IAlumnoService;
 import com.zebop.sistemasCorrelativas.util.Constantes;
 import org.springframework.stereotype.Service;
 

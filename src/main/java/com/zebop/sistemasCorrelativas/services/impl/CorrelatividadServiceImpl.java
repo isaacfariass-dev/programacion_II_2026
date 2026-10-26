@@ -1,12 +1,12 @@
-package com.zebop.sistemasCorrelativas.service.impl;
+package com.zebop.sistemasCorrelativas.services.impl;
 
-import com.zebop.sistemasCorrelativas.entity.Correlatividad;
-import com.zebop.sistemasCorrelativas.entity.CorrelatividadId;
+import com.zebop.sistemasCorrelativas.models.Correlatividad;
+import com.zebop.sistemasCorrelativas.models.CorrelatividadId;
 import com.zebop.sistemasCorrelativas.exception.CorrelatividadCiclicaException;
 import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
-import com.zebop.sistemasCorrelativas.repository.CorrelatividadRepository;
-import com.zebop.sistemasCorrelativas.service.ICorrelatividadService;
+import com.zebop.sistemasCorrelativas.repositories.CorrelatividadRepository;
+import com.zebop.sistemasCorrelativas.services.ICorrelatividadService;
 import com.zebop.sistemasCorrelativas.util.Constantes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -25,22 +25,7 @@ CREATE TABLE IF NOT EXISTS alumno (
         ON UPDATE CASCADE
 );
 
--- 3. Tabla: Usuario (Gestión de credenciales de acceso, sin roles)
--- Acceso unificado: la relación 1:1 opcional con alumno es solo para vincular el plan de estudios
-CREATE TABLE IF NOT EXISTS usuario (
-    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    id_alumno INT UNIQUE NULL COMMENT 'Clave foránea UNIQUE (1:1), opcional',
-    nombre_usuario VARCHAR(50) UNIQUE NOT NULL,
-    clave VARCHAR(255) NOT NULL,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_usuario_alumno 
-        FOREIGN KEY (id_alumno) 
-        REFERENCES alumno(id_alumno) 
-        ON DELETE CASCADE 
-        ON UPDATE CASCADE
-);
-
--- 4. Tabla: Materia (Asignaturas pertenecientes a una carrera)
+-- 3. Tabla: Materia (Asignaturas pertenecientes a una carrera)
 CREATE TABLE IF NOT EXISTS materia (
     id_materia INT AUTO_INCREMENT PRIMARY KEY,
     id_carrera INT NOT NULL,
@@ -56,7 +41,7 @@ CREATE TABLE IF NOT EXISTS materia (
         ON UPDATE CASCADE
 );
 
--- 5. Tabla: Historial Académico (Estado y notas del alumno en cada materia)
+-- 4. Tabla: Historial Académico (Estado y notas del alumno en cada materia)
 -- Relación 1:N desde alumno y 1:N desde materia
 CREATE TABLE IF NOT EXISTS historial_academico (
     id_historial INT AUTO_INCREMENT PRIMARY KEY,
@@ -76,7 +61,7 @@ CREATE TABLE IF NOT EXISTS historial_academico (
     CONSTRAINT uk_alumno_materia UNIQUE (id_alumno, id_materia) COMMENT 'Evita duplicidad de estados para la misma materia en un alumno'
 );
 
--- 6. Tabla: Correlatividad (Relación N:M recursiva sobre materia)
+-- 5. Tabla: Correlatividad (Relación N:M recursiva sobre materia)
 CREATE TABLE IF NOT EXISTS correlatividad (
     id_materia_destino INT NOT NULL COMMENT 'Materia que el alumno desea cursar o rendir',
     id_materia_requisito INT NOT NULL COMMENT 'Materia previa que actúa como condición',
@@ -159,10 +144,4 @@ ON DUPLICATE KEY UPDATE tipo_requisito = VALUES(tipo_requisito);
 INSERT INTO alumno (id_alumno, id_carrera, legajo, nombre, apellido, anio_ingreso) VALUES
 (1, 1, 'ALU-2024-001', 'Juan', 'Pérez', 2024)
 ON DUPLICATE KEY UPDATE nombre = VALUES(nombre);
-
--- 5. Usuarios de prueba (acceso unificado, sin distinción de roles)
-INSERT INTO usuario (id_usuario, id_alumno, nombre_usuario, clave) VALUES
-(1, NULL, 'admin', 'admin123'),
-(2, 1, 'alumno', 'alumno123')
-ON DUPLICATE KEY UPDATE nombre_usuario = VALUES(nombre_usuario);
 

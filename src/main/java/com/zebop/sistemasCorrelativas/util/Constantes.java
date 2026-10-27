@@ -37,12 +37,9 @@ public final class Constantes {
     public static final int DURACION_CARRERA_MINIMA_ANIOS = 1;
     public static final double NOTA_MINIMA = 1.0;
     public static final double NOTA_MAXIMA = 10.0;
-    public static final double NOTA_MINIMA_APROBACION = 4.0;
-    public static final double NOTA_MINIMA_PROMOCION = 7.0;
 
     // -------------------------------------------------------------
     // Nombres de Vistas Comunes
     // -------------------------------------------------------------
     public static final String VISTA_ERROR = "error";
-    public static final String REDIRECT_HOME = "redirect:/";
 }

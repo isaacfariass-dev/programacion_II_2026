@@ -10,19 +10,12 @@
         SICRA
     </a>
 
-    <!-- Vista unificada: todo usuario autenticado ve todas las secciones, sin distinción de roles -->
-    <ul class="nav-links" th:if="${session.usuarioLogueado != null}">
+    <ul class="nav-links">
 
         <li>
             <a th:href="@{/plan}">
                 <i class="bi bi-grid-3x3-gap-fill" style="margin-right:0.3rem;font-size:0.85rem;"></i>
                 Malla Curricular
-            </a>
-        </li>
-        <li>
-            <a th:href="@{/selector-carrera}">
-                <i class="bi bi-arrow-left-right" style="margin-right:0.3rem;font-size:0.85rem;"></i>
-                Cambiar Carrera
             </a>
         </li>
         <li>
@@ -39,24 +32,6 @@
         </li>
 
     </ul>
-
-    <!-- Zona derecha: chip de usuario + logout -->
-    <div class="nav-right" th:if="${session.usuarioLogueado != null}">
-
-        <div class="user-chip">
-            <div class="user-avatar"
-                 th:text="${#strings.substring(session.usuarioLogueado.nombreUsuario, 0, 1).toUpperCase()}">
-                U
-            </div>
-            <span th:text="${session.usuarioLogueado.nombreUsuario}">usuario</span>
-        </div>
-
-        <a th:href="@{/logout}" class="btn-logout" title="Cerrar sesión">
-            <i class="bi bi-box-arrow-right" style="margin-right:0.3rem;"></i>
-            Salir
-        </a>
-
-    </div>
 
 </nav>
 

@@ -12,5 +12,4 @@ public interface CorrelatividadRepository extends JpaRepository<Correlatividad, 
     List<Correlatividad> findByIdMateriaDestino(Long idMateriaDestino);
     List<Correlatividad> findByIdMateriaRequisito(Long idMateriaRequisito);
     boolean existsByIdMateriaDestinoAndIdMateriaRequisito(Long idMateriaDestino, Long idMateriaRequisito);
-    void deleteByIdMateriaDestinoAndIdMateriaRequisito(Long idMateriaDestino, Long idMateriaRequisito);
 }

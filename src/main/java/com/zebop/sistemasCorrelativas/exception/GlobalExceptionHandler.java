@@ -34,16 +34,6 @@ public class GlobalExceptionHandler {
         return vistaResultado;
     }
 
-    @ExceptionHandler(AccesoDenegadoException.class)
-    public String manejarAccesoDenegado(AccesoDenegadoException ex, Model model) {
-        String vistaResultado;
-        model.addAttribute("tituloError", "Acceso Denegado");
-        model.addAttribute("mensajeError", ex.getMessage());
-        model.addAttribute("codigoEstado", 403);
-        vistaResultado = Constantes.VISTA_ERROR;
-        return vistaResultado;
-    }
-
     @ExceptionHandler(Exception.class)
     public String manejarExcepcionGeneral(Exception ex, Model model) {
         String vistaResultado;

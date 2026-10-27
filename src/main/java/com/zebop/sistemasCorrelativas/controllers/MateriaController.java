@@ -5,12 +5,11 @@ import com.zebop.sistemasCorrelativas.models.Correlatividad;
 import com.zebop.sistemasCorrelativas.models.Materia;
 import com.zebop.sistemasCorrelativas.models.enums.Cuatrimestre;
 import com.zebop.sistemasCorrelativas.models.enums.TipoRequisito;
-import com.zebop.sistemasCorrelativas.exception.CorrelatividadCiclicaException;
-import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
 import com.zebop.sistemasCorrelativas.services.ICarreraService;
 import com.zebop.sistemasCorrelativas.services.ICorrelatividadService;
 import com.zebop.sistemasCorrelativas.services.IMateriaService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -70,20 +69,13 @@ public class MateriaController {
     }
 
     @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
-        String vista;
-        try {
-            Materia materia = materiaService.obtenerPorId(id);
-            model.addAttribute("materia", materia);
-            model.addAttribute("carreras", carreraService.obtenerTodas());
-            model.addAttribute("cuatrimestres", Cuatrimestre.values());
-            model.addAttribute("esEdicion", true);
-            vista = "materia/formulario";
-        } catch (RecursoNoEncontradoException e) {
-            redirectAttrs.addFlashAttribute("mensajeError", e.getMessage());
-            vista = "redirect:/materias";
-        }
-        return vista;
+    public String editar(@PathVariable Long id, Model model) {
+        Materia materia = materiaService.obtenerPorId(id);
+        model.addAttribute("materia", materia);
+        model.addAttribute("carreras", carreraService.obtenerTodas());
+        model.addAttribute("cuatrimestres", Cuatrimestre.values());
+        model.addAttribute("esEdicion", true);
+        return "materia/formulario";
     }
 
     @PostMapping("/guardar")
@@ -115,39 +107,32 @@ public class MateriaController {
         try {
             materiaService.eliminar(id);
             redirectAttrs.addFlashAttribute("mensajeExito", "Materia eliminada exitosamente.");
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException e) {
             redirectAttrs.addFlashAttribute("mensajeError", "No se puede eliminar la materia porque tiene correlatividades o historiales académicos asociados.");
         }
         return redireccion;
     }
 
     @GetMapping("/{id}/correlatividades")
-    public String gestionarCorrelatividades(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
-        String vista;
-        try {
-            Materia materia = materiaService.obtenerPorId(id);
-            List<Correlatividad> requisitos = correlatividadService.obtenerRequisitosDeMateria(id);
-            List<Correlatividad> materiasQueHabilita = correlatividadService.obtenerMateriasQueHabilita(id);
+    public String gestionarCorrelatividades(@PathVariable Long id, Model model) {
+        Materia materia = materiaService.obtenerPorId(id);
+        List<Correlatividad> requisitos = correlatividadService.obtenerRequisitosDeMateria(id);
+        List<Correlatividad> materiasQueHabilita = correlatividadService.obtenerMateriasQueHabilita(id);
 
-            List<Materia> materiasDeCarrera = materiaService.obtenerPorCarrera(materia.getCarrera().getIdCarrera());
-            List<Materia> candidatas = new ArrayList<>();
-            for (Materia m : materiasDeCarrera) {
-                if (!m.getIdMateria().equals(id)) {
-                    candidatas.add(m);
-                }
+        List<Materia> materiasDeCarrera = materiaService.obtenerPorCarrera(materia.getCarrera().getIdCarrera());
+        List<Materia> candidatas = new ArrayList<>();
+        for (Materia m : materiasDeCarrera) {
+            if (!m.getIdMateria().equals(id)) {
+                candidatas.add(m);
             }
-
-            model.addAttribute("materia", materia);
-            model.addAttribute("requisitos", requisitos);
-            model.addAttribute("materiasQueHabilita", materiasQueHabilita);
-            model.addAttribute("candidatas", candidatas);
-            model.addAttribute("tiposRequisito", TipoRequisito.values());
-            vista = "materia/correlatividades";
-        } catch (RecursoNoEncontradoException e) {
-            redirectAttrs.addFlashAttribute("mensajeError", e.getMessage());
-            vista = "redirect:/materias";
         }
-        return vista;
+
+        model.addAttribute("materia", materia);
+        model.addAttribute("requisitos", requisitos);
+        model.addAttribute("materiasQueHabilita", materiasQueHabilita);
+        model.addAttribute("candidatas", candidatas);
+        model.addAttribute("tiposRequisito", TipoRequisito.values());
+        return "materia/correlatividades";
     }
 
     @PostMapping("/{id}/correlatividades/agregar")
@@ -174,13 +159,8 @@ public class MateriaController {
     public String eliminarCorrelatividad(@PathVariable Long id,
                                          @RequestParam Long idMateriaRequisito,
                                          RedirectAttributes redirectAttrs) {
-        String redireccion = "redirect:/materias/" + id + "/correlatividades";
-        try {
-            correlatividadService.eliminar(id, idMateriaRequisito);
-            redirectAttrs.addFlashAttribute("mensajeExito", "Correlatividad eliminada correctamente.");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("mensajeError", "Error al eliminar la correlatividad.");
-        }
-        return redireccion;
+        correlatividadService.eliminar(id, idMateriaRequisito);
+        redirectAttrs.addFlashAttribute("mensajeExito", "Correlatividad eliminada correctamente.");
+        return "redirect:/materias/" + id + "/correlatividades";
     }
 }

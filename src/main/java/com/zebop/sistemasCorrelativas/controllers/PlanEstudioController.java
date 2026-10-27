@@ -9,23 +9,19 @@ import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
 import com.zebop.sistemasCorrelativas.services.IAcademicoService;
 import com.zebop.sistemasCorrelativas.services.IAlumnoService;
 import com.zebop.sistemasCorrelativas.services.IMateriaService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Controlador principal para la visualización del árbol de correlatividades,
- * marcado del historial académico y simulador de impacto.
+ * Controlador principal para la visualización del árbol de correlatividades
+ * y el marcado del historial académico.
  */
 @Controller
 @RequestMapping("/plan")
@@ -106,58 +102,8 @@ public class PlanEstudioController {
     public String resetearMateria(@RequestParam Long alumnoId,
                                   @RequestParam Long idMateria,
                                   RedirectAttributes redirectAttrs) {
-        String redireccion = "redirect:/plan?alumnoId=" + alumnoId;
-
-        try {
-            academicoService.resetearEstadoMateria(alumnoId, idMateria);
-            redirectAttrs.addFlashAttribute("mensajeExito", "Se restableció el estado de la materia.");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("mensajeError", "Error al restablecer la materia.");
-        }
-
-        return redireccion;
-    }
-
-    /**
-     * Endpoint API para actualización rápida vía AJAX (sin recarga de página).
-     * Retorna el plan de estudios actualizado en formato JSON.
-     */
-    @PostMapping(value = "/api/actualizar-estado", produces = "application/json; charset=UTF-8")
-    @ResponseBody
-    public ResponseEntity<?> actualizarEstadoAjax(@RequestParam Long alumnoId,
-                                                  @RequestParam Long idMateria,
-                                                  @RequestParam EstadoMateria estado,
-                                                  @RequestParam(required = false) Double notaFinal) {
-        ResponseEntity<?> respuesta;
-        try {
-            academicoService.actualizarEstadoMateria(alumnoId, idMateria, estado, notaFinal);
-            PlanEstudioDTO planActualizado = academicoService.obtenerPlanEstudio(alumnoId);
-            respuesta = ResponseEntity.ok(planActualizado);
-        } catch (Exception e) {
-            Map<String, String> errorMap = new HashMap<>();
-            errorMap.put("error", e.getMessage());
-            respuesta = ResponseEntity.badRequest().body(errorMap);
-        }
-        return respuesta;
-    }
-
-    /**
-     * Endpoint API para resetear una materia vía AJAX (sin recarga de página).
-     */
-    @PostMapping(value = "/api/resetear-materia", produces = "application/json; charset=UTF-8")
-    @ResponseBody
-    public ResponseEntity<?> resetearMateriaAjax(@RequestParam Long alumnoId,
-                                                @RequestParam Long idMateria) {
-        ResponseEntity<?> respuesta;
-        try {
-            academicoService.resetearEstadoMateria(alumnoId, idMateria);
-            PlanEstudioDTO planActualizado = academicoService.obtenerPlanEstudio(alumnoId);
-            respuesta = ResponseEntity.ok(planActualizado);
-        } catch (Exception e) {
-            Map<String, String> errorMap = new HashMap<>();
-            errorMap.put("error", e.getMessage());
-            respuesta = ResponseEntity.badRequest().body(errorMap);
-        }
-        return respuesta;
+        academicoService.resetearEstadoMateria(alumnoId, idMateria);
+        redirectAttrs.addFlashAttribute("mensajeExito", "Se restableció el estado de la materia.");
+        return "redirect:/plan?alumnoId=" + alumnoId;
     }
 }

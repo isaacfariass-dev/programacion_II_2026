@@ -1,13 +1,12 @@
 package com.zebop.sistemasCorrelativas.services;
 
 import com.zebop.sistemasCorrelativas.dto.PlanEstudioDTO;
-import com.zebop.sistemasCorrelativas.dto.SimulacionResultadoDTO;
 import com.zebop.sistemasCorrelativas.models.enums.EstadoMateria;
 
 /**
  * Servicio encargado de la lógica central de SICRA:
- * cálculo de correlatividades, estados de materias de un alumno,
- * actualización de historial académico y simulación de impacto de aprobación.
+ * cálculo de correlatividades, estados de materias de un alumno
+ * y actualización de historial académico.
  */
 public interface IAcademicoService {
 
@@ -38,14 +37,4 @@ public interface IAcademicoService {
      * @param idMateria Identificador de la materia.
      */
     void resetearEstadoMateria(Long idAlumno, Long idMateria);
-
-    /**
-     * Simula qué materias se destrancarían si el alumno aprobara una materia específica.
-     * No altera los datos persistidos en la base de datos.
-     *
-     * @param idAlumno  Identificador del estudiante.
-     * @param idMateria Identificador de la materia a simular aprobada.
-     * @return Resultado de la simulación con materias desbloqueadas.
-     */
-    SimulacionResultadoDTO simularAprobacion(Long idAlumno, Long idMateria);
 }

@@ -1,9 +1,9 @@
 package com.zebop.sistemasCorrelativas.controllers;
 
 import com.zebop.sistemasCorrelativas.models.Carrera;
-import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
 import com.zebop.sistemasCorrelativas.services.ICarreraService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,18 +43,11 @@ public class CarreraController {
     }
 
     @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Long id, Model model, RedirectAttributes redirectAttrs) {
-        String vista;
-        try {
-            Carrera carrera = carreraService.obtenerPorId(id);
-            model.addAttribute("carrera", carrera);
-            model.addAttribute("esEdicion", true);
-            vista = "carrera/formulario";
-        } catch (RecursoNoEncontradoException e) {
-            redirectAttrs.addFlashAttribute("mensajeError", e.getMessage());
-            vista = "redirect:/carreras";
-        }
-        return vista;
+    public String editar(@PathVariable Long id, Model model) {
+        Carrera carrera = carreraService.obtenerPorId(id);
+        model.addAttribute("carrera", carrera);
+        model.addAttribute("esEdicion", true);
+        return "carrera/formulario";
     }
 
     @PostMapping("/guardar")
@@ -81,7 +74,7 @@ public class CarreraController {
         try {
             carreraService.eliminar(id);
             redirectAttrs.addFlashAttribute("mensajeExito", "Carrera eliminada exitosamente.");
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException e) {
             redirectAttrs.addFlashAttribute("mensajeError", "No se puede eliminar la carrera porque posee materias o alumnos asociados.");
         }
         return redireccion;

@@ -54,6 +54,12 @@ public class CorrelatividadServiceImpl implements ICorrelatividadService {
             throw new ReglaNegocioException(Constantes.ERROR_AUTODEPENDENCIA);
         }
 
+        Long carreraDestinoId = correlatividad.getMateriaDestino().getCarrera().getIdCarrera();
+        Long carreraRequisitoId = correlatividad.getMateriaRequisito().getCarrera().getIdCarrera();
+        if (!Objects.equals(carreraDestinoId, carreraRequisitoId)) {
+            throw new ReglaNegocioException(Constantes.ERROR_CARRERAS_DISTINTAS);
+        }
+
         if (correlatividadRepository.existsByIdMateriaDestinoAndIdMateriaRequisito(destinoId, requisitoId)) {
             throw new ReglaNegocioException(Constantes.ERROR_CORRELATIVIDAD_DUPLICADA);
         }

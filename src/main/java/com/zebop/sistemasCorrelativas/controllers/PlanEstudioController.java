@@ -9,7 +9,6 @@ import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
 import com.zebop.sistemasCorrelativas.services.IAcademicoService;
 import com.zebop.sistemasCorrelativas.services.IAlumnoService;
 import com.zebop.sistemasCorrelativas.services.IMateriaService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,18 +48,11 @@ public class PlanEstudioController {
      * y coloreadas según su estado de correlatividad.
      */
     @GetMapping
-    public String verPlan(@RequestParam(required = false) Long alumnoId, HttpSession session, Model model) {
+    public String verPlan(@RequestParam(required = false) Long alumnoId, Model model) {
         String vista;
         List<Alumno> alumnos = alumnoService.obtenerTodos();
 
-        // Si el usuario en sesión tiene un alumno vinculado, usarlo por defecto
-        com.zebop.sistemasCorrelativas.models.Usuario usuario = 
-            (com.zebop.sistemasCorrelativas.models.Usuario) session.getAttribute("usuarioLogueado");
-        
         Long idElegido = alumnoId;
-        if (idElegido == null && usuario != null && usuario.getAlumno() != null) {
-            idElegido = usuario.getAlumno().getIdAlumno();
-        }
 
         if (alumnos.isEmpty()) {
             model.addAttribute("mensajeError", "No hay alumnos cargados en la base de datos.");

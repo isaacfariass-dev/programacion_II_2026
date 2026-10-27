@@ -44,16 +44,6 @@ public class GlobalExceptionHandler {
         return vistaResultado;
     }
 
-    @ExceptionHandler(AutenticacionException.class)
-    public String manejarAutenticacion(AutenticacionException ex, Model model) {
-        String vistaResultado;
-        model.addAttribute("tituloError", "Error de Autenticación");
-        model.addAttribute("mensajeError", ex.getMessage());
-        model.addAttribute("codigoEstado", 401);
-        vistaResultado = Constantes.VISTA_ERROR;
-        return vistaResultado;
-    }
-
     @ExceptionHandler(Exception.class)
     public String manejarExcepcionGeneral(Exception ex, Model model) {
         String vistaResultado;

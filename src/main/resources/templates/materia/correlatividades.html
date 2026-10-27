@@ -42,17 +42,16 @@
                     </h5>
                 </div>
                 <div class="card-body p-4">
-                    <form method="post" th:action="@{/materias/{id}/correlatividades/agregar(id=${materia.idMateria})}">
+                    <form id="formAgregarCorrelativa" method="post" th:action="@{/materias/{id}/correlatividades/agregar(id=${materia.idMateria})}">
                         <div class="mb-3">
-                            <label for="idMateriaRequisito" class="form-label fw-semibold">Materia Requisito:</label>
-                            <select id="idMateriaRequisito" name="idMateriaRequisito" class="form-select" required>
-                                <option value="" disabled selected>-- Seleccione una materia previa --</option>
+                            <label for="idMateriaRequisito" class="form-label fw-semibold">Materias Requisito:</label>
+                            <select id="idMateriaRequisito" name="idMateriaRequisito" class="form-select" multiple size="6" required>
                                 <option th:each="cand : ${candidatas}"
                                         th:value="${cand.idMateria}"
-                                        th:text="${cand.codigo + ' — ' + cand.nombre + ' (Año ' + cand.anioPlan + ')'}">
+                                        th:text="${cand.nombre + ' (Año ' + cand.anioPlan + ')'}">
                                 </option>
                             </select>
-                            <div class="form-text">Materia que el estudiante debe haber cursado o aprobado previamente.</div>
+                            <div class="form-text">Mantené presionado Ctrl (o Cmd) para seleccionar varias materias previas.</div>
                         </div>
 
                         <div class="mb-4">
@@ -179,5 +178,33 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    document.getElementById('formAgregarCorrelativa').addEventListener('submit', function (evento) {
+        var select = document.getElementById('idMateriaRequisito');
+        var seleccionadas = Array.from(select.selectedOptions).map(function (o) { return o.value; });
+        if (seleccionadas.length <= 1) {
+            return; // envío normal del formulario, sin tocar el backend
+        }
+        evento.preventDefault();
+        var form = evento.target;
+        var tipoRequisito = form.querySelector('[name="tipoRequisito"]').value;
+        var accion = form.action;
+
+        seleccionadas.reduce(function (promesaPrevia, idMateriaRequisito) {
+            return promesaPrevia.then(function () {
+                var datos = new URLSearchParams();
+                datos.append('idMateriaRequisito', idMateriaRequisito);
+                datos.append('tipoRequisito', tipoRequisito);
+                return fetch(accion, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: datos.toString()
+                });
+            });
+        }, Promise.resolve()).then(function () {
+            window.location.reload();
+        });
+    });
+</script>
 </body>
 </html>

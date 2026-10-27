@@ -12,7 +12,7 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<main class="container-fluid px-4 py-4">
+<main class="container-xxl px-4 py-4">
     <div th:replace="~{fragments/mensajes :: mensajes}"></div>
 
     <div class="row align-items-center mb-4 g-3">
@@ -53,8 +53,18 @@
         </div>
     </div>
 
-    <!-- Tabla de Materias -->
-    <div class="card shadow-sm border-0">
+    <!-- Sin resultados -->
+    <div class="alert alert-light border text-muted text-center" th:if="${#lists.isEmpty(materias)}">
+        No hay materias cargadas para el criterio seleccionado.
+    </div>
+
+    <!-- Materias agrupadas por Año de plan; cada fila indica su carrera debajo del nombre -->
+    <div th:each="anio : ${#numbers.sequence(1, 10)}"
+         th:if="${not #lists.isEmpty(materias.?[anioPlan == #vars.anio])}"
+         class="card shadow-sm border-0 mb-3">
+        <div class="card-header bg-light py-2">
+            <span class="fw-semibold small text-uppercase text-muted">Año <span th:text="${anio}"></span></span>
+        </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -62,32 +72,22 @@
                         <tr>
                             <th scope="col" class="ps-4">Código</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Carrera</th>
-                            <th scope="col">Año</th>
                             <th scope="col">Cuatrimestre</th>
-                            <th scope="col">Carga Horaria</th>
                             <th scope="col" class="text-end pe-4">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:if="${#lists.isEmpty(materias)}">
-                            <td colspan="7" class="text-center py-4 text-muted">
-                                No hay materias cargadas para el criterio seleccionado.
-                            </td>
-                        </tr>
-                        <tr th:each="m : ${materias}">
+                        <tr th:each="m : ${materias.?[anioPlan == #vars.anio]}">
                             <td class="ps-4">
                                 <span class="badge bg-secondary font-monospace" th:text="${m.codigo}"></span>
                             </td>
-                            <td class="fw-semibold text-dark" th:text="${m.nombre}"></td>
-                            <td class="text-muted small" th:text="${m.carrera != null ? m.carrera.nombre : 'Sin carrera'}"></td>
                             <td>
-                                <span class="badge bg-primary text-white" th:text="'Año ' + ${m.anioPlan}"></span>
+                                <div class="fw-semibold text-dark" th:text="${m.nombre}"></div>
+                                <div class="text-muted" style="font-size: 0.78rem;" th:text="${m.carrera != null ? m.carrera.nombre : 'Sin carrera'}"></div>
                             </td>
                             <td>
                                 <span class="badge bg-light text-dark border small" th:text="${m.cuatrimestre}"></span>
                             </td>
-                            <td class="small text-muted" th:text="${m.cargaHoraria + ' hs'}"></td>
                             <td class="text-end pe-4">
                                 <a th:href="@{/materias/{id}/correlatividades(id=${m.idMateria})}" class="btn btn-outline-warning text-dark btn-sm me-1" title="Gestionar Correlatividades">
                                     <i class="bi bi-diagram-3-fill"></i> Correlativas

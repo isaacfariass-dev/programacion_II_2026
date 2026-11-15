@@ -88,7 +88,7 @@ public class PlanEstudioController {
         try {
             academicoService.actualizarEstadoMateria(alumnoId, idMateria, estado, notaFinal);
             redirectAttrs.addFlashAttribute("mensajeExito", "Estado académico actualizado correctamente.");
-        } catch (ReglaNegocioException | RecursoNoEncontradoException e) {
+        } catch (ReglaNegocioException | RecursoNoEncontradoException | IllegalArgumentException e) {
             redirectAttrs.addFlashAttribute("mensajeError", e.getMessage());
         }
 

@@ -61,7 +61,7 @@ public class CarreraController {
                 carreraService.actualizar(carrera.getIdCarrera(), carrera);
                 redirectAttrs.addFlashAttribute("mensajeExito", "Carrera actualizada exitosamente.");
             }
-        } catch (ReglaNegocioException e) {
+        } catch (ReglaNegocioException | IllegalArgumentException e) {
             redirectAttrs.addFlashAttribute("mensajeError", e.getMessage());
             redireccion = (carrera.getIdCarrera() == null) ? "redirect:/carreras/nueva" : "redirect:/carreras/editar/" + carrera.getIdCarrera();
         }

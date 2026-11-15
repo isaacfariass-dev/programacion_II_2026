@@ -1,5 +1,6 @@
 package com.zebop.sistemasCorrelativas.models;
 
+import com.zebop.sistemasCorrelativas.util.Constantes;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -41,18 +42,43 @@ public class Carrera implements Serializable {
     }
 
     public void setCodigo(String codigo) {
-        this.codigo = codigo;
+        if (codigo == null || codigo.isBlank()) {
+            throw new IllegalArgumentException("El código de la carrera es obligatorio.");
+        }
+        if (codigo.trim().length() > Constantes.LONGITUD_MAXIMA_CODIGO_CARRERA) {
+            throw new IllegalArgumentException("El código de la carrera no puede superar los " + Constantes.LONGITUD_MAXIMA_CODIGO_CARRERA + " caracteres.");
+        }
+        this.codigo = codigo.trim();
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre de la carrera es obligatorio.");
+        }
+        if (nombre.trim().length() > Constantes.LONGITUD_MAXIMA_NOMBRE_CARRERA) {
+            throw new IllegalArgumentException("El nombre de la carrera no puede superar los " + Constantes.LONGITUD_MAXIMA_NOMBRE_CARRERA + " caracteres.");
+        }
+        this.nombre = nombre.trim();
     }
 
     public void setInstitucion(String institucion) {
-        this.institucion = institucion;
+        if (institucion == null || institucion.isBlank()) {
+            throw new IllegalArgumentException("La institución de la carrera es obligatoria.");
+        }
+        if (institucion.trim().length() > Constantes.LONGITUD_MAXIMA_INSTITUCION) {
+            throw new IllegalArgumentException("La institución no puede superar los " + Constantes.LONGITUD_MAXIMA_INSTITUCION + " caracteres.");
+        }
+        this.institucion = institucion.trim();
     }
 
     public void setDuracionAnios(Integer duracionAnios) {
+        if (duracionAnios == null) {
+            throw new IllegalArgumentException("La duración de la carrera es obligatoria.");
+        }
+        if (duracionAnios < Constantes.DURACION_CARRERA_MINIMA_ANIOS || duracionAnios > Constantes.DURACION_CARRERA_MAXIMA_ANIOS) {
+            throw new IllegalArgumentException("La duración de la carrera debe estar entre " + Constantes.DURACION_CARRERA_MINIMA_ANIOS
+                    + " y " + Constantes.DURACION_CARRERA_MAXIMA_ANIOS + " años.");
+        }
         this.duracionAnios = duracionAnios;
     }
 

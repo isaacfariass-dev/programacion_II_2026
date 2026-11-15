@@ -18,10 +18,16 @@ public class CorrelatividadId implements Serializable {
     private Long idMateriaRequisito;
 
     public void setIdMateriaDestino(Long idMateriaDestino) {
+        if (idMateriaDestino == null) {
+            throw new IllegalArgumentException("Debe indicarse el id de la materia destino.");
+        }
         this.idMateriaDestino = idMateriaDestino;
     }
 
     public void setIdMateriaRequisito(Long idMateriaRequisito) {
+        if (idMateriaRequisito == null) {
+            throw new IllegalArgumentException("Debe indicarse el id de la materia requisito.");
+        }
         this.idMateriaRequisito = idMateriaRequisito;
     }
 

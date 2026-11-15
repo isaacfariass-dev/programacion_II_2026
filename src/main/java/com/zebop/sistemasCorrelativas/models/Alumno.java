@@ -1,7 +1,9 @@
 package com.zebop.sistemasCorrelativas.models;
 
+import com.zebop.sistemasCorrelativas.util.Constantes;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.time.Year;
 import java.util.Objects;
 import lombok.*;
 /**
@@ -46,25 +48,53 @@ public class Alumno implements Serializable {
     }
 
     public void setCarrera(Carrera carrera) {
+        if (carrera == null) {
+            throw new IllegalArgumentException("El alumno debe pertenecer a una carrera.");
+        }
         this.carrera = carrera;
     }
 
 
     public void setLegajo(String legajo) {
-        this.legajo = legajo;
+        if (legajo == null || legajo.isBlank()) {
+            throw new IllegalArgumentException("El legajo del alumno es obligatorio.");
+        }
+        if (legajo.trim().length() > Constantes.LONGITUD_MAXIMA_LEGAJO) {
+            throw new IllegalArgumentException("El legajo no puede superar los " + Constantes.LONGITUD_MAXIMA_LEGAJO + " caracteres.");
+        }
+        this.legajo = legajo.trim();
     }
 
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre del alumno es obligatorio.");
+        }
+        if (nombre.trim().length() > Constantes.LONGITUD_MAXIMA_NOMBRE_ALUMNO) {
+            throw new IllegalArgumentException("El nombre no puede superar los " + Constantes.LONGITUD_MAXIMA_NOMBRE_ALUMNO + " caracteres.");
+        }
+        this.nombre = nombre.trim();
     }
 
 
     public void setApellido(String apellido) {
-        this.apellido = apellido;
+        if (apellido == null || apellido.isBlank()) {
+            throw new IllegalArgumentException("El apellido del alumno es obligatorio.");
+        }
+        if (apellido.trim().length() > Constantes.LONGITUD_MAXIMA_APELLIDO_ALUMNO) {
+            throw new IllegalArgumentException("El apellido no puede superar los " + Constantes.LONGITUD_MAXIMA_APELLIDO_ALUMNO + " caracteres.");
+        }
+        this.apellido = apellido.trim();
     }
 
     public void setAnioIngreso(Integer anioIngreso) {
+        if (anioIngreso == null) {
+            throw new IllegalArgumentException("El año de ingreso es obligatorio.");
+        }
+        int anioActual = Year.now().getValue();
+        if (anioIngreso < 2000 || anioIngreso > anioActual) {
+            throw new IllegalArgumentException("El año de ingreso debe estar entre 2000 y " + anioActual + ".");
+        }
         this.anioIngreso = anioIngreso;
     }
 

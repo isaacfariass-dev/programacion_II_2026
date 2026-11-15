@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface CarreraRepository extends JpaRepository<Carrera, Long> {
     Optional<Carrera> findByCodigo(String codigo);
     boolean existsByCodigo(String codigo);
+    Optional<Carrera> findByNombreIgnoreCase(String nombre);
+    boolean existsByNombreIgnoreCase(String nombre);
 }

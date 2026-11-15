@@ -42,40 +42,51 @@ public class Correlatividad implements Serializable {
 
 
     public Correlatividad(Materia materiaDestino, Materia materiaRequisito, TipoRequisito tipoRequisito) {
-        this.materiaDestino = materiaDestino;
-        this.materiaRequisito = materiaRequisito;
-        if (materiaDestino != null) {
-            this.idMateriaDestino = materiaDestino.getIdMateria();
-        }
-        if (materiaRequisito != null) {
-            this.idMateriaRequisito = materiaRequisito.getIdMateria();
-        }
-        this.tipoRequisito = tipoRequisito;
+        setMateriaDestino(materiaDestino);
+        setMateriaRequisito(materiaRequisito);
+        setTipoRequisito(tipoRequisito);
     }
 
     public void setIdMateriaDestino(Long idMateriaDestino) {
+        if (idMateriaDestino == null) {
+            throw new IllegalArgumentException("Debe indicarse la materia destino de la correlatividad.");
+        }
         this.idMateriaDestino = idMateriaDestino;
     }
     public void setIdMateriaRequisito(Long idMateriaRequisito) {
+        if (idMateriaRequisito == null) {
+            throw new IllegalArgumentException("Debe indicarse la materia requisito de la correlatividad.");
+        }
         this.idMateriaRequisito = idMateriaRequisito;
     }
 
     public void setMateriaDestino(Materia materiaDestino) {
-        this.materiaDestino = materiaDestino;
-        if (materiaDestino != null) {
-            this.idMateriaDestino = materiaDestino.getIdMateria();
+        if (materiaDestino == null || materiaDestino.getIdMateria() == null) {
+            throw new IllegalArgumentException("Debe indicarse la materia destino de la correlatividad.");
         }
+        if (materiaRequisito != null && Objects.equals(materiaDestino.getIdMateria(), materiaRequisito.getIdMateria())) {
+            throw new IllegalArgumentException("Una materia no puede ser correlativa de sí misma.");
+        }
+        this.materiaDestino = materiaDestino;
+        this.idMateriaDestino = materiaDestino.getIdMateria();
     }
 
     public void setMateriaRequisito(Materia materiaRequisito) {
-        this.materiaRequisito = materiaRequisito;
-        if (materiaRequisito != null) {
-            this.idMateriaRequisito = materiaRequisito.getIdMateria();
+        if (materiaRequisito == null || materiaRequisito.getIdMateria() == null) {
+            throw new IllegalArgumentException("Debe indicarse la materia requisito de la correlatividad.");
         }
+        if (materiaDestino != null && Objects.equals(materiaRequisito.getIdMateria(), materiaDestino.getIdMateria())) {
+            throw new IllegalArgumentException("Una materia no puede ser correlativa de sí misma.");
+        }
+        this.materiaRequisito = materiaRequisito;
+        this.idMateriaRequisito = materiaRequisito.getIdMateria();
     }
 
 
     public void setTipoRequisito(TipoRequisito tipoRequisito) {
+        if (tipoRequisito == null) {
+            throw new IllegalArgumentException("Debe indicarse el tipo de requisito exigido (REGULAR o APROBADA).");
+        }
         this.tipoRequisito = tipoRequisito;
     }
 

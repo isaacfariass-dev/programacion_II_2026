@@ -94,7 +94,7 @@ public class MateriaController {
                 materiaService.actualizar(materia.getIdMateria(), materia);
                 redirectAttrs.addFlashAttribute("mensajeExito", "Materia actualizada exitosamente.");
             }
-        } catch (ReglaNegocioException e) {
+        } catch (ReglaNegocioException | IllegalArgumentException e) {
             redirectAttrs.addFlashAttribute("mensajeError", e.getMessage());
             redireccion = (materia.getIdMateria() == null) ? "redirect:/materias/nueva" : "redirect:/materias/editar/" + materia.getIdMateria();
         }
@@ -122,7 +122,8 @@ public class MateriaController {
         List<Materia> materiasDeCarrera = materiaService.obtenerPorCarrera(materia.getCarrera().getIdCarrera());
         List<Materia> candidatas = new ArrayList<>();
         for (Materia m : materiasDeCarrera) {
-            if (!m.getIdMateria().equals(id)) {
+            // Una materia requisito nunca puede ser de un año posterior al de la materia que la exige.
+            if (!m.getIdMateria().equals(id) && m.getAnioPlan() <= materia.getAnioPlan()) {
                 candidatas.add(m);
             }
         }
@@ -149,7 +150,7 @@ public class MateriaController {
             correlatividadService.guardar(correlatividad);
 
             redirectAttrs.addFlashAttribute("mensajeExito", "Correlatividad agregada correctamente.");
-        } catch (ReglaNegocioException e) {
+        } catch (ReglaNegocioException | IllegalArgumentException e) {
             redirectAttrs.addFlashAttribute("mensajeError", e.getMessage());
         }
         return redireccion;

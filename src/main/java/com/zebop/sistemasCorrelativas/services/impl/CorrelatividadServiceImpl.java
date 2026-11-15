@@ -60,6 +60,12 @@ public class CorrelatividadServiceImpl implements ICorrelatividadService {
             throw new ReglaNegocioException(Constantes.ERROR_CARRERAS_DISTINTAS);
         }
 
+        Integer anioDestino = correlatividad.getMateriaDestino().getAnioPlan();
+        Integer anioRequisito = correlatividad.getMateriaRequisito().getAnioPlan();
+        if (anioDestino != null && anioRequisito != null && anioRequisito > anioDestino) {
+            throw new ReglaNegocioException(Constantes.ERROR_REQUISITO_ANIO_POSTERIOR);
+        }
+
         if (correlatividadRepository.existsByIdMateriaDestinoAndIdMateriaRequisito(destinoId, requisitoId)) {
             throw new ReglaNegocioException(Constantes.ERROR_CORRELATIVIDAD_DUPLICADA);
         }

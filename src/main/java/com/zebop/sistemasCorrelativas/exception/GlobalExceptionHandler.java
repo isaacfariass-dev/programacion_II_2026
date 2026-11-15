@@ -34,6 +34,16 @@ public class GlobalExceptionHandler {
         return vistaResultado;
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String manejarArgumentoInvalido(IllegalArgumentException ex, Model model) {
+        String vistaResultado;
+        model.addAttribute("tituloError", "Dato Inválido");
+        model.addAttribute("mensajeError", ex.getMessage());
+        model.addAttribute("codigoEstado", 400);
+        vistaResultado = Constantes.VISTA_ERROR;
+        return vistaResultado;
+    }
+
     @ExceptionHandler(Exception.class)
     public String manejarExcepcionGeneral(Exception ex, Model model) {
         String vistaResultado;

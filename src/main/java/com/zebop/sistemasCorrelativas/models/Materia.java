@@ -1,6 +1,7 @@
 package com.zebop.sistemasCorrelativas.models;
 
 import com.zebop.sistemasCorrelativas.models.enums.Cuatrimestre;
+import com.zebop.sistemasCorrelativas.util.Constantes;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -52,27 +53,58 @@ public class Materia implements Serializable {
         this.idMateria = idMateria;
     }
     public void setCarrera(Carrera carrera) {
+        if (carrera == null) {
+            throw new IllegalArgumentException("La materia debe pertenecer a una carrera.");
+        }
         this.carrera = carrera;
     }
 
     public void setCodigo(String codigo) {
-        this.codigo = codigo;
+        if (codigo == null || codigo.isBlank()) {
+            throw new IllegalArgumentException("El código de la materia es obligatorio.");
+        }
+        if (codigo.trim().length() > Constantes.LONGITUD_MAXIMA_CODIGO_MATERIA) {
+            throw new IllegalArgumentException("El código de la materia no puede superar los " + Constantes.LONGITUD_MAXIMA_CODIGO_MATERIA + " caracteres.");
+        }
+        this.codigo = codigo.trim();
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre de la materia es obligatorio.");
+        }
+        if (nombre.trim().length() > Constantes.LONGITUD_MAXIMA_NOMBRE_MATERIA) {
+            throw new IllegalArgumentException("El nombre de la materia no puede superar los " + Constantes.LONGITUD_MAXIMA_NOMBRE_MATERIA + " caracteres.");
+        }
+        this.nombre = nombre.trim();
     }
 
     public void setAnioPlan(Integer anioPlan) {
+        if (anioPlan == null) {
+            throw new IllegalArgumentException("El año del plan es obligatorio.");
+        }
+        if (anioPlan < Constantes.ANIO_PLAN_MINIMO || anioPlan > Constantes.ANIO_PLAN_MAXIMO) {
+            throw new IllegalArgumentException("El año del plan debe estar entre " + Constantes.ANIO_PLAN_MINIMO
+                    + " y " + Constantes.ANIO_PLAN_MAXIMO + ".");
+        }
         this.anioPlan = anioPlan;
     }
 
 
     public void setCuatrimestre(Cuatrimestre cuatrimestre) {
+        if (cuatrimestre == null) {
+            throw new IllegalArgumentException("El cuatrimestre es obligatorio.");
+        }
         this.cuatrimestre = cuatrimestre;
     }
 
     public void setCargaHoraria(Integer cargaHoraria) {
+        if (cargaHoraria == null) {
+            throw new IllegalArgumentException("La carga horaria es obligatoria.");
+        }
+        if (cargaHoraria < Constantes.CARGA_HORARIA_MINIMA) {
+            throw new IllegalArgumentException("La carga horaria debe ser mayor o igual a " + Constantes.CARGA_HORARIA_MINIMA + ".");
+        }
         this.cargaHoraria = cargaHoraria;
     }
 

@@ -45,8 +45,8 @@ public class CarreraServiceImpl implements ICarreraService {
         if (carrera.getCodigo() != null && carreraRepository.existsByCodigo(carrera.getCodigo())) {
             throw new ReglaNegocioException(Constantes.ERROR_CODIGO_CARRERA_DUPLICADO);
         }
-        if (carrera.getDuracionAnios() != null && carrera.getDuracionAnios() < Constantes.DURACION_CARRERA_MINIMA_ANIOS) {
-            throw new ReglaNegocioException("La duración de la carrera debe ser de al menos " + Constantes.DURACION_CARRERA_MINIMA_ANIOS + " año.");
+        if (carrera.getNombre() != null && carreraRepository.existsByNombreIgnoreCase(carrera.getNombre())) {
+            throw new ReglaNegocioException(Constantes.ERROR_NOMBRE_CARRERA_DUPLICADO);
         }
         Carrera guardada = carreraRepository.save(carrera);
         return guardada;
@@ -63,8 +63,11 @@ public class CarreraServiceImpl implements ICarreraService {
             }
         }
 
-        if (carreraActualizada.getDuracionAnios() != null && carreraActualizada.getDuracionAnios() < Constantes.DURACION_CARRERA_MINIMA_ANIOS) {
-            throw new ReglaNegocioException("La duración de la carrera debe ser de al menos " + Constantes.DURACION_CARRERA_MINIMA_ANIOS + " año.");
+        if (carreraActualizada.getNombre() != null && !carreraActualizada.getNombre().equalsIgnoreCase(existente.getNombre())) {
+            Optional<Carrera> conMismoNombre = carreraRepository.findByNombreIgnoreCase(carreraActualizada.getNombre());
+            if (conMismoNombre.isPresent() && !conMismoNombre.get().getIdCarrera().equals(id)) {
+                throw new ReglaNegocioException(Constantes.ERROR_NOMBRE_CARRERA_DUPLICADO);
+            }
         }
 
         existente.setCodigo(carreraActualizada.getCodigo());

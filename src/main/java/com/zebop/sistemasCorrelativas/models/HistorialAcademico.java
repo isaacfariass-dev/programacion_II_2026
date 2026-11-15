@@ -1,6 +1,7 @@
 package com.zebop.sistemasCorrelativas.models;
 
 import com.zebop.sistemasCorrelativas.models.enums.EstadoMateria;
+import com.zebop.sistemasCorrelativas.util.Constantes;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -51,18 +52,30 @@ public class HistorialAcademico implements Serializable {
 
 
     public void setAlumno(Alumno alumno) {
+        if (alumno == null) {
+            throw new IllegalArgumentException("El registro de historial académico debe estar asociado a un alumno.");
+        }
         this.alumno = alumno;
     }
 
     public void setMateria(Materia materia) {
+        if (materia == null) {
+            throw new IllegalArgumentException("El registro de historial académico debe estar asociado a una materia.");
+        }
         this.materia = materia;
     }
 
     public void setEstado(EstadoMateria estado) {
+        if (estado == null) {
+            throw new IllegalArgumentException("El estado académico es obligatorio.");
+        }
         this.estado = estado;
     }
 
     public void setNotaFinal(Double notaFinal) {
+        if (notaFinal != null && (notaFinal < Constantes.NOTA_MINIMA || notaFinal > Constantes.NOTA_MAXIMA)) {
+            throw new IllegalArgumentException("La nota debe estar entre " + Constantes.NOTA_MINIMA + " y " + Constantes.NOTA_MAXIMA + ".");
+        }
         this.notaFinal = notaFinal;
     }
 

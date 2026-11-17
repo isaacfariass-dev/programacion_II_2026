@@ -122,8 +122,8 @@ public class MateriaController {
         List<Materia> materiasDeCarrera = materiaService.obtenerPorCarrera(materia.getCarrera().getIdCarrera());
         List<Materia> candidatas = new ArrayList<>();
         for (Materia m : materiasDeCarrera) {
-            // Una materia requisito nunca puede ser de un año posterior al de la materia que la exige.
-            if (!m.getIdMateria().equals(id) && m.getAnioPlan() <= materia.getAnioPlan()) {
+            // Solo se ofrecen como requisito las materias que terminan antes de que empiece esta (año + cuatrimestre).
+            if (!m.getIdMateria().equals(id) && m.puedeSerRequisitoDe(materia)) {
                 candidatas.add(m);
             }
         }

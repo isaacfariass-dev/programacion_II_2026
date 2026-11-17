@@ -4,6 +4,7 @@ import com.zebop.sistemasCorrelativas.models.enums.Cuatrimestre;
 import com.zebop.sistemasCorrelativas.util.Constantes;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Objects;
 import lombok.*;
 
@@ -106,6 +107,45 @@ public class Materia implements Serializable {
             throw new IllegalArgumentException("La carga horaria debe ser mayor o igual a " + Constantes.CARGA_HORARIA_MINIMA + ".");
         }
         this.cargaHoraria = cargaHoraria;
+    }
+
+    /**
+     * Orden natural dentro de un plan: año, luego periodo (anual, 1.er cuat., 2.º cuat.) y por último código.
+     */
+    public static final Comparator<Materia> ORDEN_PLAN = Comparator
+            .comparing(Materia::getAnioPlan, Comparator.nullsLast(Comparator.naturalOrder()))
+            .thenComparing(Materia::getCuatrimestre, Comparator.nullsLast(Comparator.naturalOrder()))
+            .thenComparing(Materia::getCodigo, Comparator.nullsLast(Comparator.naturalOrder()));
+
+    /** Periodo absoluto en el que empieza la cursada (ver {@link Cuatrimestre}). */
+    public int periodoInicio() {
+        return cuatrimestre.periodoInicio(anioPlan);
+    }
+
+    /** Periodo absoluto en el que termina la cursada (ver {@link Cuatrimestre}). */
+    public int periodoFin() {
+        return cuatrimestre.periodoFin(anioPlan);
+    }
+
+    /**
+     * Una materia puede ser requisito de otra solo si su cursada termina antes de que empiece la de la otra.
+     * Ej.: 1.er cuatrimestre -> 2.º cuatrimestre del mismo año: válido.
+     *      Anual -> 2.º cuatrimestre del mismo año: inválido (se superponen).
+     */
+    public boolean puedeSerRequisitoDe(Materia destino) {
+        return esRequisitoValido(this.anioPlan, this.cuatrimestre, destino.anioPlan, destino.cuatrimestre);
+    }
+
+    /**
+     * Misma regla que {@link #puedeSerRequisitoDe(Materia)}, pero a partir de valores sueltos
+     * (útil para validar un cambio de año/cuatrimestre antes de aplicarlo a la entidad).
+     */
+    public static boolean esRequisitoValido(Integer anioRequisito, Cuatrimestre cuatRequisito,
+                                            Integer anioDestino, Cuatrimestre cuatDestino) {
+        if (anioRequisito == null || cuatRequisito == null || anioDestino == null || cuatDestino == null) {
+            return true;
+        }
+        return cuatRequisito.periodoFin(anioRequisito) < cuatDestino.periodoInicio(anioDestino);
     }
 
     @Override

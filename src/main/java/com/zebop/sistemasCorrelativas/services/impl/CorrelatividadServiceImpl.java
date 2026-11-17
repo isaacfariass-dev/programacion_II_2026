@@ -60,10 +60,10 @@ public class CorrelatividadServiceImpl implements ICorrelatividadService {
             throw new ReglaNegocioException(Constantes.ERROR_CARRERAS_DISTINTAS);
         }
 
-        Integer anioDestino = correlatividad.getMateriaDestino().getAnioPlan();
-        Integer anioRequisito = correlatividad.getMateriaRequisito().getAnioPlan();
-        if (anioDestino != null && anioRequisito != null && anioRequisito > anioDestino) {
-            throw new ReglaNegocioException(Constantes.ERROR_REQUISITO_ANIO_POSTERIOR);
+        // El requisito tiene que terminar de cursarse antes de que empiece la materia destino
+        // (contempla materias anuales y cuatrimestrales).
+        if (!correlatividad.getMateriaRequisito().puedeSerRequisitoDe(correlatividad.getMateriaDestino())) {
+            throw new ReglaNegocioException(Constantes.ERROR_REQUISITO_PERIODO_INVALIDO);
         }
 
         if (correlatividadRepository.existsByIdMateriaDestinoAndIdMateriaRequisito(destinoId, requisitoId)) {

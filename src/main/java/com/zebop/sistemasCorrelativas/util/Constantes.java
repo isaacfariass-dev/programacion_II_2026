@@ -27,10 +27,14 @@ public final class Constantes {
     public static final String ERROR_CORRELATIVIDAD_DUPLICADA = "La relación de correlatividad ya se encuentra registrada.";
     public static final String ERROR_CARRERAS_DISTINTAS = "Las materias de una correlatividad deben pertenecer a la misma carrera.";
     public static final String ERROR_LEGAJO_DUPLICADO = "El número de legajo ya se encuentra asignado a otro alumno.";
+    public static final String ERROR_NOMBRE_USUARIO_DUPLICADO = "El nombre de usuario ya se encuentra en uso.";
+    public static final String ERROR_USUARIO_NO_ENCONTRADO = "No se encontró el usuario especificado.";
     public static final String ERROR_CODIGO_MATERIA_DUPLICADO = "El código de materia ya existe en el sistema.";
+    public static final String ERROR_NOMBRE_MATERIA_DUPLICADO = "Ya existe una materia con ese nombre en la carrera.";
     public static final String ERROR_CODIGO_CARRERA_DUPLICADO = "El código de carrera ya existe en el sistema.";
     public static final String ERROR_NOMBRE_CARRERA_DUPLICADO = "Ya existe una carrera registrada con ese nombre.";
-    public static final String ERROR_REQUISITO_ANIO_POSTERIOR = "La materia requisito no puede pertenecer a un año del plan posterior al de la materia que la exige.";
+    public static final String ERROR_REQUISITO_PERIODO_INVALIDO = "La materia requisito debe terminar de cursarse antes de que empiece la materia que la exige (revisá año y cuatrimestre de ambas).";
+    public static final String ERROR_CAMBIO_PERIODO_ROMPE_CORRELATIVAS = "No se puede cambiar el año/cuatrimestre: la materia quedaría superpuesta o desordenada respecto de sus correlativas (%s). Quitá esas correlatividades primero.";
 
     // -------------------------------------------------------------
     // Valores de Dominio y Validación Numérica
@@ -51,6 +55,8 @@ public final class Constantes {
     public static final int LONGITUD_MAXIMA_LEGAJO = 20;
     public static final int LONGITUD_MAXIMA_NOMBRE_ALUMNO = 50;
     public static final int LONGITUD_MAXIMA_APELLIDO_ALUMNO = 50;
+    public static final int LONGITUD_MAXIMA_NOMBRE_USUARIO = 50;
+    public static final int LONGITUD_MAXIMA_CLAVE = 255;
 
     // -------------------------------------------------------------
     // Nombres de Vistas Comunes

@@ -61,7 +61,7 @@
                                 <select id="cuatrimestre" th:field="*{cuatrimestre}" class="form-select" required>
                                     <option th:each="cuat : ${cuatrimestres}"
                                             th:value="${cuat}"
-                                            th:text="${cuat}">
+                                            th:text="${cuat.etiqueta}">
                                     </option>
                                 </select>
                             </div>

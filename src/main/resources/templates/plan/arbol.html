@@ -114,6 +114,7 @@
                         <div class="card-top">
                             <span class="card-codigo" th:text="${dto.materia.codigo}">INF-01</span>
                             <span class="card-meta">
+                                <span th:if="${dto.materia.cuatrimestre.name() != 'ANUAL'}" th:title="${dto.materia.cuatrimestre.etiqueta}" th:text="${dto.materia.cuatrimestre.name() == 'PRIMER_CUATRIMESTRE' ? '1C ·' : '2C ·'}">1C ·</span>
                                 <i class="bi bi-clock"></i>
                                 <span th:text="${dto.materia.cargaHoraria + 'h'}">64h</span>
                             </span>
@@ -139,9 +140,6 @@
                                 </span>
                             </span>
                         </div>
-                        <div class="card-requisitos card-sin-requisitos" th:unless="${dto.requisitosPrevios != null and !dto.requisitosPrevios.isEmpty()}">
-                            <span class="card-req-label text-muted">Sin correlativas</span>
-                        </div>
 
                         <!-- Acciones: cargar/cambiar el estado académico de la materia (sin JS, formularios server-side) -->
                         <div class="card-acciones" th:unless="${dto.isBloqueada()}">
@@ -155,8 +153,6 @@
                                             th:selected="${e.name() == dto.estadoVisual.name()}">
                                     </option>
                                 </select>
-                                <input type="number" name="notaFinal" class="input-mini" placeholder="Nota"
-                                       min="0" max="10" step="0.01">
                                 <button type="submit" class="btn-mini" title="Guardar estado">
                                     <i class="bi bi-check-lg"></i>
                                 </button>

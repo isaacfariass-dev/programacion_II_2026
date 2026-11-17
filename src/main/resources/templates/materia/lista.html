@@ -86,7 +86,7 @@
                                 <div class="text-muted" style="font-size: 0.78rem;" th:text="${m.carrera != null ? m.carrera.nombre : 'Sin carrera'}"></div>
                             </td>
                             <td>
-                                <span class="badge bg-light text-dark border small" th:text="${m.cuatrimestre}"></span>
+                                <span class="badge bg-light text-dark border small" th:text="${m.cuatrimestre.etiqueta}"></span>
                             </td>
                             <td class="text-end pe-4">
                                 <a th:href="@{/materias/{id}/correlatividades(id=${m.idMateria})}" class="btn btn-outline-warning text-dark btn-sm me-1" title="Gestionar Correlatividades">

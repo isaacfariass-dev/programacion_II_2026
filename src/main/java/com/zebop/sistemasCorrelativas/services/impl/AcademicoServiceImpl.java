@@ -65,7 +65,9 @@ public class AcademicoServiceImpl implements IAcademicoService {
         plan.setAlumno(alumno);
         plan.setCarrera(carrera);
 
-        List<Materia> materias = materiaRepository.findByCarrera_IdCarreraOrderByAnioPlanAscCodigoAsc(carrera.getIdCarrera());
+        // Orden dentro de cada año: anuales, 1.er cuatrimestre, 2.º cuatrimestre (y luego por código).
+        List<Materia> materias = new ArrayList<>(materiaRepository.findByCarrera_IdCarreraOrderByAnioPlanAscCodigoAsc(carrera.getIdCarrera()));
+        materias.sort(Materia.ORDEN_PLAN);
         List<HistorialAcademico> historiales = historialRepository.findByAlumno_IdAlumno(idAlumno);
 
         Map<Long, HistorialAcademico> historialMap = new HashMap<>();

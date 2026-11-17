@@ -1,0 +1,124 @@
+<mxfile host="Electron" agent="claude-code">
+  <diagram name="Casos de Uso - Sistema de Correlativas" id="cu-sistema-correlativas">
+    <mxGraphModel dx="3108" dy="2455" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1250" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="actor_admin" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=12;" value="Administrador" vertex="1">
+          <mxGeometry height="60" width="30" x="30" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="actor_alumno" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=12;" value="Alumno" vertex="1">
+          <mxGeometry height="60" width="30" x="30" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="boundary" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=13;align=center;fillColor=none;" value="Sistema de Gestión de Correlativas" vertex="1">
+          <mxGeometry height="870" width="930" x="-90" y="-30" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_carreras" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" value="Gestionar Carreras" vertex="1">
+          <mxGeometry height="60" width="170" x="200" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_carrera_alta" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Registrar Carrera" vertex="1">
+          <mxGeometry height="40" width="160" x="540" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_carrera_mod" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Modificar Carrera" vertex="1">
+          <mxGeometry height="40" width="160" x="540" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_carrera_baja" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Eliminar Carrera" vertex="1">
+          <mxGeometry height="40" width="160" x="540" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_carrera_listar" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Listar Carreras" vertex="1">
+          <mxGeometry height="40" width="160" x="540" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_materias" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" value="Gestionar Materias" vertex="1">
+          <mxGeometry height="60" width="170" x="200" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_materia_alta" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Registrar Materia" vertex="1">
+          <mxGeometry height="40" width="160" x="540" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_materia_mod" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Modificar Materia" vertex="1">
+          <mxGeometry height="40" width="160" x="540" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_materia_baja" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Eliminar Materia" vertex="1">
+          <mxGeometry height="40" width="160" x="540" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_materia_listar" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Listar Materias" vertex="1">
+          <mxGeometry height="40" width="160" x="540" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_correl" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=12;" value="Gestionar Correlatividades" vertex="1">
+          <mxGeometry height="60" width="170" x="200" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_correl_agregar" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Agregar Correlatividad" vertex="1">
+          <mxGeometry height="40" width="170" x="540" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_correl_eliminar" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Eliminar Correlatividad" vertex="1">
+          <mxGeometry height="40" width="170" x="540" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_correl_consultar" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Consultar Correlatividades de una Materia" vertex="1">
+          <mxGeometry height="50" width="190" x="540" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_plan" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Visualizar Plan de Estudios y Árbol de Correlatividades" vertex="1">
+          <mxGeometry height="60" width="230" x="200" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_actualizar_estado" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Actualizar Estado Académico de una Materia" vertex="1">
+          <mxGeometry height="50" width="230" x="200" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_resetear_estado" parent="1" style="ellipse;whiteSpace=wrap;html=1;fontSize=11;" value="Resetear Estado de una Materia" vertex="1">
+          <mxGeometry height="40" width="230" x="200" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="a1" edge="1" parent="1" source="actor_admin" style="edgeStyle=none;html=1;endArrow=none;startArrow=none;" target="uc_carreras">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" edge="1" parent="1" source="actor_admin" style="edgeStyle=none;html=1;endArrow=none;startArrow=none;" target="uc_materias">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" edge="1" parent="1" source="actor_admin" style="edgeStyle=none;html=1;endArrow=none;startArrow=none;" target="uc_correl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" edge="1" parent="1" source="actor_alumno" style="edgeStyle=none;html=1;endArrow=none;startArrow=none;" target="uc_plan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5" edge="1" parent="1" source="actor_alumno" style="edgeStyle=none;html=1;endArrow=none;startArrow=none;" target="uc_actualizar_estado">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a6" edge="1" parent="1" source="actor_alumno" style="edgeStyle=none;html=1;endArrow=none;startArrow=none;" target="uc_resetear_estado">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i1" edge="1" parent="1" source="uc_carreras" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_carrera_alta" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i2" edge="1" parent="1" source="uc_carreras" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_carrera_mod" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i3" edge="1" parent="1" source="uc_carreras" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_carrera_baja" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i4" edge="1" parent="1" source="uc_carreras" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_carrera_listar" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i5" edge="1" parent="1" source="uc_materias" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_materia_alta" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i6" edge="1" parent="1" source="uc_materias" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_materia_mod" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i7" edge="1" parent="1" source="uc_materias" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_materia_baja" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i8" edge="1" parent="1" source="uc_materias" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_materia_listar" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i9" edge="1" parent="1" source="uc_correl" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_correl_agregar" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i10" edge="1" parent="1" source="uc_correl" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_correl_eliminar" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i11" edge="1" parent="1" source="uc_correl" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_correl_consultar" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="uc_actualizar_estado" style="html=1;endArrow=open;dashed=1;fontSize=10;" target="uc_plan" value="&lt;&lt;extend&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

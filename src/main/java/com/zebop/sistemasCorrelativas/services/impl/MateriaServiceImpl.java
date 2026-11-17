@@ -1,5 +1,6 @@
 package com.zebop.sistemasCorrelativas.services.impl;
 
+import com.zebop.sistemasCorrelativas.models.Carrera;
 import com.zebop.sistemasCorrelativas.models.Correlatividad;
 import com.zebop.sistemasCorrelativas.models.Materia;
 import com.zebop.sistemasCorrelativas.models.enums.Cuatrimestre;
@@ -66,6 +67,7 @@ public class MateriaServiceImpl implements IMateriaService {
         if (materia.getCargaHoraria() != null && materia.getCargaHoraria() < Constantes.CARGA_HORARIA_MINIMA) {
             throw new ReglaNegocioException("La carga horaria debe ser mayor o igual a " + Constantes.CARGA_HORARIA_MINIMA);
         }
+        validarAnioDentroDeCarrera(materia.getAnioPlan(), materia.getCarrera());
         Materia guardada = materiaRepository.save(materia);
         return guardada;
     }
@@ -96,6 +98,15 @@ public class MateriaServiceImpl implements IMateriaService {
             throw new ReglaNegocioException("La carga horaria debe ser mayor o igual a " + Constantes.CARGA_HORARIA_MINIMA);
         }
 
+        // Mover la materia a otra carrera dejaría correlatividades entre carreras distintas.
+        boolean cambiaDeCarrera = !idCarreraDestino.equals(existente.getCarrera().getIdCarrera());
+        if (cambiaDeCarrera && correlatividadRepository.existsByIdMateriaDestinoOrIdMateriaRequisito(id, id)) {
+            throw new ReglaNegocioException(Constantes.ERROR_CAMBIO_CARRERA_CON_CORRELATIVAS);
+        }
+
+        Carrera carreraDestino = materiaActualizada.getCarrera() != null ? materiaActualizada.getCarrera() : existente.getCarrera();
+        validarAnioDentroDeCarrera(materiaActualizada.getAnioPlan(), carreraDestino);
+
         validarPeriodoContraCorrelativas(id, materiaActualizada.getAnioPlan(), materiaActualizada.getCuatrimestre());
 
         existente.setCodigo(materiaActualizada.getCodigo());
@@ -107,6 +118,14 @@ public class MateriaServiceImpl implements IMateriaService {
 
         Materia resultado = materiaRepository.save(existente);
         return resultado;
+    }
+
+    /** El año del plan de una materia no puede superar la duración de su carrera. */
+    private void validarAnioDentroDeCarrera(Integer anioPlan, Carrera carrera) {
+        if (anioPlan != null && carrera != null && carrera.getDuracionAnios() != null
+                && anioPlan > carrera.getDuracionAnios()) {
+            throw new ReglaNegocioException(String.format(Constantes.ERROR_ANIO_FUERA_DE_CARRERA, carrera.getDuracionAnios()));
+        }
     }
 
     /**

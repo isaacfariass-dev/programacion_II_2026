@@ -45,6 +45,10 @@ public class MateriaEstadoDTO {
         return estadoVisual == EstadoVisualMateria.REGULAR;
     }
 
+    public boolean isCursando() {
+        return estadoVisual == EstadoVisualMateria.CURSANDO;
+    }
+
     public String getRequisitosIds() {
         String resultado;
         if (requisitosPrevios == null || requisitosPrevios.isEmpty()) {

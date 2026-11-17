@@ -15,4 +15,5 @@ public interface MateriaRepository extends JpaRepository<Materia, Long> {
     List<Materia> findByCarrera_IdCarreraOrderByAnioPlanAscCodigoAsc(Long idCarrera);
     Optional<Materia> findByNombreIgnoreCaseAndCarrera_IdCarrera(String nombre, Long idCarrera);
     boolean existsByNombreIgnoreCaseAndCarrera_IdCarrera(String nombre, Long idCarrera);
+    boolean existsByCarrera_IdCarreraAndAnioPlanGreaterThan(Long idCarrera, Integer anioPlan);
 }

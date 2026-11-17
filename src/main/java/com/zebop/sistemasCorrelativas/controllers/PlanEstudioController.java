@@ -58,11 +58,13 @@ public class PlanEstudioController {
                 idElegido = alumnos.get(0).getIdAlumno();
             }
 
+            // Se cargan antes del try para que el selector de alumnos siga visible aunque falle el plan.
+            model.addAttribute("alumnos", alumnos);
+            model.addAttribute("alumnoActualId", idElegido);
+
             try {
                 PlanEstudioDTO plan = academicoService.obtenerPlanEstudio(idElegido);
                 model.addAttribute("plan", plan);
-                model.addAttribute("alumnos", alumnos);
-                model.addAttribute("alumnoActualId", idElegido);
                 model.addAttribute("estadosMateria", EstadoMateria.values());
                 vista = "plan/arbol";
             } catch (RecursoNoEncontradoException e) {
@@ -102,8 +104,12 @@ public class PlanEstudioController {
     public String resetearMateria(@RequestParam Long alumnoId,
                                   @RequestParam Long idMateria,
                                   RedirectAttributes redirectAttrs) {
-        academicoService.resetearEstadoMateria(alumnoId, idMateria);
-        redirectAttrs.addFlashAttribute("mensajeExito", "Se restableció el estado de la materia.");
+        try {
+            academicoService.resetearEstadoMateria(alumnoId, idMateria);
+            redirectAttrs.addFlashAttribute("mensajeExito", "Se restableció el estado de la materia.");
+        } catch (ReglaNegocioException | RecursoNoEncontradoException e) {
+            redirectAttrs.addFlashAttribute("mensajeError", e.getMessage());
+        }
         return "redirect:/plan?alumnoId=" + alumnoId;
     }
 }

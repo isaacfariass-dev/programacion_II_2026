@@ -28,6 +28,7 @@ public class PlanEstudioDTO {
     private int totalMaterias;
     private int materiasAprobadas;
     private int materiasRegulares;
+    private int materiasCursando;
     private int materiasHabilitadas;
     private int materiasBloqueadas;
     private int materiasDesaprobadas;

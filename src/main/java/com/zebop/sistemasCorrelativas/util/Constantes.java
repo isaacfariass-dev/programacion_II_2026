@@ -34,6 +34,9 @@ public final class Constantes {
     public static final String ERROR_CODIGO_CARRERA_DUPLICADO = "El código de carrera ya existe en el sistema.";
     public static final String ERROR_NOMBRE_CARRERA_DUPLICADO = "Ya existe una carrera registrada con ese nombre.";
     public static final String ERROR_REQUISITO_PERIODO_INVALIDO = "La materia requisito debe terminar de cursarse antes de que empiece la materia que la exige (revisá año y cuatrimestre de ambas).";
+    public static final String ERROR_ANIO_FUERA_DE_CARRERA = "La carrera dura %d años: el año del plan de la materia no puede ser mayor.";
+    public static final String ERROR_DURACION_MENOR_QUE_MATERIAS = "No se puede reducir la duración a %d años: hay materias cargadas en años posteriores. Movelas o eliminalas primero.";
+    public static final String ERROR_CAMBIO_CARRERA_CON_CORRELATIVAS = "No se puede cambiar la carrera de la materia porque tiene correlatividades cargadas. Quitalas primero.";
     public static final String ERROR_CAMBIO_PERIODO_ROMPE_CORRELATIVAS = "No se puede cambiar el año/cuatrimestre: la materia quedaría superpuesta o desordenada respecto de sus correlativas (%s). Quitá esas correlatividades primero.";
 
     // -------------------------------------------------------------
@@ -43,7 +46,8 @@ public final class Constantes {
     public static final int DURACION_CARRERA_MINIMA_ANIOS = 1;
     public static final int DURACION_CARRERA_MAXIMA_ANIOS = 10;
     public static final int ANIO_PLAN_MINIMO = 1;
-    public static final int ANIO_PLAN_MAXIMO = 6;
+    // Límite absoluto; el límite real de cada materia es la duración de su carrera (se valida en MateriaServiceImpl).
+    public static final int ANIO_PLAN_MAXIMO = DURACION_CARRERA_MAXIMA_ANIOS;
     public static final double NOTA_MINIMA = 1.0;
     public static final double NOTA_MAXIMA = 10.0;
 

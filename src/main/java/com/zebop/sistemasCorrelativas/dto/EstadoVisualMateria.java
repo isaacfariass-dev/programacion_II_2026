@@ -7,6 +7,7 @@ package com.zebop.sistemasCorrelativas.dto;
 public enum EstadoVisualMateria {
     APROBADA("Aprobada", "estado-aprobada", "bg-success text-white"),
     REGULAR("Regular", "estado-regular", "bg-info text-white"),
+    CURSANDO("Cursando", "estado-cursando", "bg-primary text-white"),
     DESAPROBADA("Desaprobada", "estado-desaprobada", "bg-danger text-white"),
     HABILITADA("Habilitada", "estado-habilitada", "bg-warning text-dark"),
     BLOQUEADA("Bloqueada", "estado-bloqueada", "bg-secondary text-white");

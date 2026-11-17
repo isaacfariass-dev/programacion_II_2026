@@ -5,13 +5,16 @@ import com.zebop.sistemasCorrelativas.models.Correlatividad;
 import com.zebop.sistemasCorrelativas.models.Materia;
 import com.zebop.sistemasCorrelativas.models.enums.Cuatrimestre;
 import com.zebop.sistemasCorrelativas.models.enums.TipoRequisito;
+import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
 import com.zebop.sistemasCorrelativas.services.ICarreraService;
 import com.zebop.sistemasCorrelativas.services.ICorrelatividadService;
 import com.zebop.sistemasCorrelativas.services.IMateriaService;
+import com.zebop.sistemasCorrelativas.util.MensajesBinding;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,10 +83,15 @@ public class MateriaController {
 
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute Materia materia,
+                          BindingResult binding,
                           @RequestParam Long carreraId,
                           RedirectAttributes redirectAttrs) {
         String redireccion = "redirect:/materias";
         try {
+            if (binding.hasErrors()) {
+                // Un setter de la entidad rechazó un dato durante el binding del formulario.
+                throw new ReglaNegocioException(MensajesBinding.primerMensaje(binding));
+            }
             Carrera carrera = carreraService.obtenerPorId(carreraId);
             materia.setCarrera(carrera);
 
@@ -160,8 +168,12 @@ public class MateriaController {
     public String eliminarCorrelatividad(@PathVariable Long id,
                                          @RequestParam Long idMateriaRequisito,
                                          RedirectAttributes redirectAttrs) {
-        correlatividadService.eliminar(id, idMateriaRequisito);
-        redirectAttrs.addFlashAttribute("mensajeExito", "Correlatividad eliminada correctamente.");
+        try {
+            correlatividadService.eliminar(id, idMateriaRequisito);
+            redirectAttrs.addFlashAttribute("mensajeExito", "Correlatividad eliminada correctamente.");
+        } catch (RecursoNoEncontradoException | ReglaNegocioException e) {
+            redirectAttrs.addFlashAttribute("mensajeError", e.getMessage());
+        }
         return "redirect:/materias/" + id + "/correlatividades";
     }
 }

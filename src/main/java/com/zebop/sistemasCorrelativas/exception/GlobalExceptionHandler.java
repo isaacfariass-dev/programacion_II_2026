@@ -1,5 +1,7 @@
 package com.zebop.sistemasCorrelativas.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,6 +19,8 @@ import com.zebop.sistemasCorrelativas.util.Constantes;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(RecursoNoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -70,8 +74,10 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String manejarExcepcionGeneral(Exception ex, Model model) {
         String vistaResultado;
+        // El detalle técnico (SQL, Hibernate, etc.) va al log, no a la pantalla del usuario.
+        log.error("Error inesperado al procesar la solicitud", ex);
         model.addAttribute("tituloError", "Error Inesperado del Sistema");
-        model.addAttribute("mensajeError", "Ocurrió un error inesperado al procesar la solicitud: " + ex.getMessage());
+        model.addAttribute("mensajeError", "Ocurrió un error inesperado al procesar la solicitud. Intentá nuevamente más tarde.");
         model.addAttribute("codigoEstado", 500);
         vistaResultado = Constantes.VISTA_ERROR;
         return vistaResultado;

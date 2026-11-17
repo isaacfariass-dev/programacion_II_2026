@@ -4,6 +4,7 @@ import com.zebop.sistemasCorrelativas.models.Carrera;
 import com.zebop.sistemasCorrelativas.exception.RecursoNoEncontradoException;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
 import com.zebop.sistemasCorrelativas.repositories.CarreraRepository;
+import com.zebop.sistemasCorrelativas.repositories.MateriaRepository;
 import com.zebop.sistemasCorrelativas.services.ICarreraService;
 import com.zebop.sistemasCorrelativas.util.Constantes;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,11 @@ import java.util.Optional;
 public class CarreraServiceImpl implements ICarreraService {
 
     private final CarreraRepository carreraRepository;
+    private final MateriaRepository materiaRepository;
 
-    public CarreraServiceImpl(CarreraRepository carreraRepository) {
+    public CarreraServiceImpl(CarreraRepository carreraRepository, MateriaRepository materiaRepository) {
         this.carreraRepository = carreraRepository;
+        this.materiaRepository = materiaRepository;
     }
 
     @Override
@@ -68,6 +71,12 @@ public class CarreraServiceImpl implements ICarreraService {
             if (conMismoNombre.isPresent() && !conMismoNombre.get().getIdCarrera().equals(id)) {
                 throw new ReglaNegocioException(Constantes.ERROR_NOMBRE_CARRERA_DUPLICADO);
             }
+        }
+
+        // Acortar la carrera no puede dejar materias en años que ya no existen.
+        Integer nuevaDuracion = carreraActualizada.getDuracionAnios();
+        if (nuevaDuracion != null && materiaRepository.existsByCarrera_IdCarreraAndAnioPlanGreaterThan(id, nuevaDuracion)) {
+            throw new ReglaNegocioException(String.format(Constantes.ERROR_DURACION_MENOR_QUE_MATERIAS, nuevaDuracion));
         }
 
         existente.setCodigo(carreraActualizada.getCodigo());

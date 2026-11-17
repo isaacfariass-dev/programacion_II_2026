@@ -505,6 +505,12 @@ main {
     border-color: #fbbf24 !important;
 }
 
+.estado-cursando {
+    background-color: #e0e7ff !important;
+    color: #3730a3 !important;
+    border-color: #a5b4fc !important;
+}
+
 .estado-desaprobada {
     background-color: #fee2e2 !important;
     color: #b91c1c !important;
@@ -717,6 +723,7 @@ main {
 .card-badge.aprobada    { background: #d1fae5; color: var(--aprobada);  border-color: #6ee7b7; }
 .card-badge.habilitada  { background: #fef3c7; color: #92400e;          border-color: #fcd34d; }
 .card-badge.regular     { background: #fef3c7; color: #92400e;          border-color: #fcd34d; }
+.card-badge.cursando    { background: #e0e7ff; color: #3730a3;          border-color: #a5b4fc; }
 .card-badge.desaprobada { background: #fee2e2; color: #b91c1c;          border-color: #fca5a5; }
 .card-badge.bloqueada   { background: #f1f5f9; color: var(--bloqueada); border-color: var(--border); }
 

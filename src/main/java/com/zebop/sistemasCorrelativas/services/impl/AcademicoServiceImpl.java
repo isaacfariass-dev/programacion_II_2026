@@ -75,9 +75,18 @@ public class AcademicoServiceImpl implements IAcademicoService {
             historialMap.put(h.getMateria().getIdMateria(), h);
         }
 
+        // Todas las correlatividades de la carrera en una sola consulta (antes eran 2 consultas por materia).
+        Map<Long, List<Correlatividad>> requisitosPorMateria = new HashMap<>();
+        Map<Long, List<Correlatividad>> habilitaPorMateria = new HashMap<>();
+        for (Correlatividad c : correlatividadRepository.findByMateriaDestino_Carrera_IdCarrera(carrera.getIdCarrera())) {
+            requisitosPorMateria.computeIfAbsent(c.getIdMateriaDestino(), k -> new ArrayList<>()).add(c);
+            habilitaPorMateria.computeIfAbsent(c.getIdMateriaRequisito(), k -> new ArrayList<>()).add(c);
+        }
+
         Map<Integer, List<MateriaEstadoDTO>> materiasPorAnio = new LinkedHashMap<>();
         int aprobadas = 0;
         int regulares = 0;
+        int cursando = 0;
         int habilitadas = 0;
         int bloqueadas = 0;
         int desaprobadas = 0;
@@ -85,7 +94,9 @@ public class AcademicoServiceImpl implements IAcademicoService {
         int cantidadNotas = 0;
 
         for (Materia m : materias) {
-            MateriaEstadoDTO dto = evaluarEstadoMateria(m, historialMap);
+            MateriaEstadoDTO dto = evaluarEstadoMateria(m, historialMap,
+                    requisitosPorMateria.getOrDefault(m.getIdMateria(), List.of()),
+                    habilitaPorMateria.getOrDefault(m.getIdMateria(), List.of()));
 
             if (dto.getNotaFinal() != null) {
                 sumaNotas += dto.getNotaFinal();
@@ -95,6 +106,7 @@ public class AcademicoServiceImpl implements IAcademicoService {
             switch (dto.getEstadoVisual()) {
                 case APROBADA -> aprobadas++;
                 case REGULAR -> regulares++;
+                case CURSANDO -> cursando++;
                 case HABILITADA -> habilitadas++;
                 case BLOQUEADA -> bloqueadas++;
                 case DESAPROBADA -> desaprobadas++;
@@ -108,6 +120,7 @@ public class AcademicoServiceImpl implements IAcademicoService {
         plan.setTotalMaterias(materias.size());
         plan.setMateriasAprobadas(aprobadas);
         plan.setMateriasRegulares(regulares);
+        plan.setMateriasCursando(cursando);
         plan.setMateriasHabilitadas(habilitadas);
         plan.setMateriasBloqueadas(bloqueadas);
         plan.setMateriasDesaprobadas(desaprobadas);
@@ -163,7 +176,10 @@ public class AcademicoServiceImpl implements IAcademicoService {
     /**
      * Evalúa el estado visual de una materia y arma la lista de requisitos y materias que habilita.
      */
-    private MateriaEstadoDTO evaluarEstadoMateria(Materia materia, Map<Long, HistorialAcademico> historialMap) {
+    private MateriaEstadoDTO evaluarEstadoMateria(Materia materia,
+                                                  Map<Long, HistorialAcademico> historialMap,
+                                                  List<Correlatividad> requisitos,
+                                                  List<Correlatividad> habilitadas) {
         MateriaEstadoDTO dto = new MateriaEstadoDTO();
         dto.setMateria(materia);
 
@@ -173,13 +189,13 @@ public class AcademicoServiceImpl implements IAcademicoService {
             dto.setNotaFinal(hist.getNotaFinal());
             switch (hist.getEstado()) {
                 case APROBADA -> dto.setEstadoVisual(EstadoVisualMateria.APROBADA);
-                case REGULAR, CURSANDO -> dto.setEstadoVisual(EstadoVisualMateria.REGULAR);
+                case REGULAR -> dto.setEstadoVisual(EstadoVisualMateria.REGULAR);
+                case CURSANDO -> dto.setEstadoVisual(EstadoVisualMateria.CURSANDO);
                 case DESAPROBADA -> dto.setEstadoVisual(EstadoVisualMateria.DESAPROBADA);
             }
         }
 
         // Correlativas que esta materia exige (materiaDestino = materia actual, materiaRequisito = la que hay que tener cursada/aprobada).
-        List<Correlatividad> requisitos = correlatividadRepository.findByIdMateriaDestino(materia.getIdMateria());
         List<RequisitoInfoDTO> reqList = new ArrayList<>();
         boolean cumpleTodos = true;
 
@@ -228,7 +244,6 @@ public class AcademicoServiceImpl implements IAcademicoService {
         }
 
         // Inverso: materias para las que esta materia ES requisito (lo que se habilita al aprobarla/regularizarla).
-        List<Correlatividad> habilitadas = correlatividadRepository.findByIdMateriaRequisito(materia.getIdMateria());
         List<Materia> posteriores = new ArrayList<>();
         for (Correlatividad c : habilitadas) {
             posteriores.add(c.getMateriaDestino());

@@ -81,6 +81,10 @@
             <span>Regular</span>
         </div>
         <div class="leyenda-item">
+            <span class="leyenda-dot" style="background: #e0e7ff; border: 1px solid #a5b4fc;"></span>
+            <span>Cursando</span>
+        </div>
+        <div class="leyenda-item">
             <span class="leyenda-dot" style="background: #fee2e2; border: 1px solid #fca5a5;"></span>
             <span>Desaprobada</span>
         </div>
@@ -157,7 +161,7 @@
                                     <i class="bi bi-check-lg"></i>
                                 </button>
                             </form>
-                            <form method="post" th:action="@{/plan/resetear-materia}" th:if="${dto.notaFinal != null or dto.isRegular() or dto.isDesaprobada() or dto.isAprobada()}">
+                            <form method="post" th:action="@{/plan/resetear-materia}" th:if="${dto.notaFinal != null or dto.isRegular() or dto.isCursando() or dto.isDesaprobada() or dto.isAprobada()}">
                                 <input type="hidden" name="alumnoId" th:value="${alumnoActualId}">
                                 <input type="hidden" name="idMateria" th:value="${dto.materia.idMateria}">
                                 <button type="submit" class="btn-mini btn-mini-secondary" title="Restablecer a no cursada">

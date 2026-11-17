@@ -3,9 +3,11 @@ package com.zebop.sistemasCorrelativas.controllers;
 import com.zebop.sistemasCorrelativas.models.Carrera;
 import com.zebop.sistemasCorrelativas.exception.ReglaNegocioException;
 import com.zebop.sistemasCorrelativas.services.ICarreraService;
+import com.zebop.sistemasCorrelativas.util.MensajesBinding;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,9 +53,13 @@ public class CarreraController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Carrera carrera, RedirectAttributes redirectAttrs) {
+    public String guardar(@ModelAttribute Carrera carrera, BindingResult binding, RedirectAttributes redirectAttrs) {
         String redireccion = "redirect:/carreras";
         try {
+            if (binding.hasErrors()) {
+                // Un setter de la entidad rechazó un dato durante el binding del formulario.
+                throw new ReglaNegocioException(MensajesBinding.primerMensaje(binding));
+            }
             if (carrera.getIdCarrera() == null) {
                 carreraService.guardar(carrera);
                 redirectAttrs.addFlashAttribute("mensajeExito", "Carrera creada exitosamente.");
